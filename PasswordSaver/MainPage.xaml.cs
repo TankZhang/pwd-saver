@@ -31,7 +31,7 @@ namespace PasswordSaver
         {
             this.InitializeComponent();
             this.DataContext = VM;
-            FileManager.WriteCode("8888"); 
+            FileManager.WriteCode("8888");  
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
