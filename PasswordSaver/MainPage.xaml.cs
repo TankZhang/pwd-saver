@@ -29,7 +29,7 @@ namespace PasswordSaver
         public ViewModel VM = new ViewModel();
         public MainPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent() ;
             this.DataContext = VM;
             FileManager.WriteCode("8888");  
         }
