@@ -11,16 +11,16 @@
     HorizontalAlignment="Stretch">
     <Grid Name="grdDataItem" HorizontalAlignment="Stretch">
         <StackPanel Margin="5,5,5,30" HorizontalAlignment="Stretch">
-            <TextBlock>网站</TextBlock>
+            <TextBlock>网站：</TextBlock>
             <TextBlock Text="{Binding WebSite}"/>
-            <TextBlock>Account</TextBlock>
+            <TextBlock>账户：</TextBlock>
             <TextBlock Text="{Binding Account}"/>
             <Button Name="btnDetail" Click="btnDetail_Click" Content="Detail" HorizontalAlignment="Right"/>
             <StackPanel Name="stkpDetail"
                         Visibility="Collapsed">
-                <TextBlock>Pwd</TextBlock>
+                <TextBlock>密码：</TextBlock>
                 <TextBlock Text="{Binding Pwd}"/>
-                <TextBlock>Note</TextBlock>
+                <TextBlock>备注：</TextBlock>
                 <TextBlock Text="{Binding Note}"/>
             </StackPanel>
         </StackPanel>

@@ -90,17 +90,28 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid>
+                    <ProgressRing Name="prgrsrWaite" 
+                                  IsActive="True"
+                                  Visibility="{Binding IsProgressRingVisible,Converter={StaticResource visibleConverter}}"
+                                  Height="150"
+                                  Width="150"/>
                     <Grid Name="grdList"
                           Visibility="Collapsed">
-                        <ListView ItemsSource="{x:Bind VM.RecordItems}"
+                        <ScrollViewer>
+                            <StackPanel Orientation="Vertical">
+                                <Button Name="btnList" Click="btnList_Click">添加</Button>
+                                <Button Name="btnSave" Click="btnSave_Click">保存</Button>
+                                <Button Name="btnChangeCode" Click="btnChangeCode_Click">改密码</Button>
+                                <ListView ItemsSource="{x:Bind VM.RecordItems}"
                                   Name="lstvList">
-                            <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="data:RecordItem">
-                                    <local:UcDataItem/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                        <Button Name="btnList" Click="btnList_Click">list</Button>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="data:RecordItem">
+                                            <local:UcDataItem/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                     <Grid Name="grdAdd"
                           Visibility="Collapsed">

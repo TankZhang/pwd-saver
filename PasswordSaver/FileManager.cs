@@ -35,7 +35,7 @@ namespace PasswordSaver
 
         public async static Task WriteToRoamingDataAsync(string str)
         {
-            Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
+            //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
             StorageFile savedFile = await RoamingFolder.CreateFileAsync("dataFile", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(savedFile, str);
         }

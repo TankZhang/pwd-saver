@@ -79,15 +79,30 @@ namespace PasswordSaver
             Debug.WriteLine(VM.UserInputPwd);
         }
 
-        private async void btnList_Click(object sender, RoutedEventArgs e)
+        private void btnList_Click(object sender, RoutedEventArgs e)
         {
-            lstvList.Width = grdList.ActualWidth;
-            VM.RecordItems.Add(new Models.RecordItem("h", "h", "h", "h"));
+            VM.RecordItems.Add(new Models.RecordItem("hfdsfdsafsfsdafasfasfafdafdasfafddafsadfasf",
+                "hfasdfdfasdfasfffffffddddddddddddddddddddddddddddddddssssssssssssssssssasfdsafdsafdsafdas", 
+                "hfdsafdsfasdfdadsfadffdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsasdf",
+                "hfdsfdsafasdfasdfdfghgjhgjytuerytryreytfhgfhncvbvnghfjhfdfafasdfsadfdsafadsfsdafsafsdafsad"));
+        }
 
+        private async void btnChangeCode_Click(object sender, RoutedEventArgs e)
+        {
+            FileManager.WriteCode("321");
+            string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
+            str = EncryptHelper.DESEncrypt("321", str);
+            await FileManager.WriteToRoamingDataAsync(str);
+
+        }
+
+        private async void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            VM.IsProgressRingVisible = true;
             string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
             str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
             await FileManager.WriteToRoamingDataAsync(str);
-            
+            VM.IsProgressRingVisible = false;
         }
     }
 }

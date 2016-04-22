@@ -101,6 +101,21 @@ namespace PasswordSaver
             }
         }
 
+        private bool _isProgressRingVisible;
+        public bool IsProgressRingVisible
+        {
+            get
+            {
+                return _isProgressRingVisible;
+            }
+
+            set
+            {
+                _isProgressRingVisible = value;
+                RaisedPropertyChanged("IsProgressRingVisible");
+            }
+        }
+
         ObservableCollection<RecordItem> _recordItems;
         public ObservableCollection<RecordItem> RecordItems
         {
@@ -123,6 +138,7 @@ namespace PasswordSaver
             {
                 IsCheck = true;
                 RightPwd = pwd;
+                IsProgressRingVisible = true;
                 string encryptStr = await FileManager.ReadRoamingDataAsync();
                 if (encryptStr != "-1")
                 {
@@ -131,6 +147,7 @@ namespace PasswordSaver
                     foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
                     { RecordItems.Add(item); }
                 }
+                    IsProgressRingVisible = false;
             }
             else
                 IsCheck = false;
@@ -144,6 +161,7 @@ namespace PasswordSaver
         public ViewModel()
         {
             IsCheck = false;
+            IsProgressRingVisible = false;
             RightPwdMd5 = FileManager.GetCode();
             RecordItems = new ObservableCollection<RecordItem>();
             RecordItems.Add(new RecordItem("w1", "a1", "p1", "n1"));

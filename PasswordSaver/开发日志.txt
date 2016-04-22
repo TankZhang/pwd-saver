@@ -1,3 +1,5 @@
 #2016年4月22日09:37:09
 完成了FileManager类（包含json序列化，逆序列化，写入code，读出code，写入data，读出data）
 完成了EncryptHelper类（包含了DES加密，解密。MD5针对key和针对密码的加密方式）
+#2016年4月22日17:55:39
+开始运行，显示计算器界面，生成VM时候得到内存中的密码的MD5校验值RightPwdMd5。当输入的数字得到的MD5校验值与RightPwdMd5相同时将IsCheck设置为True。同时解出密码信息，显示密码信息列表。
