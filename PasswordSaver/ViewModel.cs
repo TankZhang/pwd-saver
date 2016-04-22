@@ -73,6 +73,34 @@ namespace PasswordSaver
             }
         }
 
+        private string _rightPwd;
+        public string RightPwd
+        {
+            get
+            {
+                return _rightPwd;
+            }
+
+            set
+            {
+                _rightPwd = value;
+            }
+        }
+
+        private string _rightPwdMd5;
+        public string RightPwdMd5
+        {
+            get
+            {
+                return _rightPwdMd5;
+            }
+
+            set
+            {
+                _rightPwdMd5 = value;
+            }
+        }
+
         ObservableCollection<RecordItem> _recordItems;
         public ObservableCollection<RecordItem> RecordItems
         {
@@ -89,10 +117,21 @@ namespace PasswordSaver
         }
 
 
-        public void CheckPassword(string pwd)
+        public async Task CheckPasswordAsync(string pwd)
         {
-            if (pwd == FileManager.GetCode())
+            if (EncryptHelper.PwdEncrypt(pwd) == RightPwdMd5)
+            {
                 IsCheck = true;
+                RightPwd = pwd;
+                string encryptStr = await FileManager.ReadRoamingDataAsync();
+                if (encryptStr != "-1")
+                {
+                    string decryptStr = EncryptHelper.DESDecrypt(RightPwd, encryptStr);
+                    RecordItems.Clear();
+                    foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
+                    { RecordItems.Add(item); }
+                }
+            }
             else
                 IsCheck = false;
         }
@@ -105,6 +144,7 @@ namespace PasswordSaver
         public ViewModel()
         {
             IsCheck = false;
+            RightPwdMd5 = FileManager.GetCode();
             RecordItems = new ObservableCollection<RecordItem>();
             RecordItems.Add(new RecordItem("w1", "a1", "p1", "n1"));
             RecordItems.Add(new RecordItem("w2", "a2", "p2", "n2"));

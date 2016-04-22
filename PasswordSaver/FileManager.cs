@@ -53,22 +53,26 @@ namespace PasswordSaver
             }
         }
 
-        public static void WriteCode(string str)
+        //将密码写入存储区
+        public static void WriteCode(string pwd)
         {
-            RoamingSettings.Values["Code"] = str;
+            WriteSetting("Code", EncryptHelper.PwdEncrypt(pwd));
         }
 
+        //写入设置
+        private static void WriteSetting(string set,string value)
+        {
+            RoamingSettings.Values[set] =value;
+        }
+
+        //读出密码
         public static string GetCode()
         {
-            if (!String.IsNullOrEmpty((String)RoamingSettings.Values["Code"]))
-            {
-                return (String)RoamingSettings.Values["Code"];
-            }
+            string str = (String)RoamingSettings.Values["Code"];
+            if (!String.IsNullOrEmpty(str))
+                return str;
             else
-            {
-                return "88888888";
-            }
-
+            return EncryptHelper.PwdEncrypt("123");
         }
     }
     /*

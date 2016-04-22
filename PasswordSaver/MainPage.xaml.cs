@@ -30,8 +30,7 @@ namespace PasswordSaver
         public MainPage()
         {
             this.InitializeComponent() ;
-            this.DataContext = VM;
-            FileManager.WriteCode("8888");  
+            this.DataContext = VM; 
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -86,23 +85,9 @@ namespace PasswordSaver
             VM.RecordItems.Add(new Models.RecordItem("h", "h", "h", "h"));
 
             string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-            str = DESHelper.DESEncrypt("8888", str);
+            str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
             await FileManager.WriteToRoamingDataAsync(str);
-
-            string strs =await FileManager.ReadRoamingDataAsync();
-            strs = DESHelper.DESDecrypt("8888", strs);
-            ObservableCollection<RecordItem> HH = new ObservableCollection<RecordItem>();
-            HH = FileManager.ReadFromJson<ObservableCollection<RecordItem>>(strs);
-
-            foreach (RecordItem item in HH)
-            {
-                Debug.WriteLine(item.WebSite);
-                Debug.WriteLine(item.Account);
-                Debug.WriteLine(item.Pwd);
-                Debug.WriteLine("");
-                Debug.WriteLine("");
-                Debug.WriteLine("");
-            }
+            
         }
     }
 }

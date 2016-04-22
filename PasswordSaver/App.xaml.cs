@@ -39,7 +39,8 @@ namespace PasswordSaver
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            //FileManager.WriteCode("123");
+            //string a = "1";
 //#if DEBUG
 //            if (System.Diagnostics.Debugger.IsAttached)
 //            {

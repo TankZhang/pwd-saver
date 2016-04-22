@@ -124,12 +124,9 @@ namespace PasswordSaver
             }
         }
 
-        private void tbxShow_TextChanged(object sender, TextChangedEventArgs e)
+        private async void tbxShow_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(tbxShow.Text==FileManager.GetCode())
-            {
-                this.Visibility = Visibility.Collapsed;
-            }
+           await ((ViewModel)DataContext).CheckPasswordAsync(tbxShow.Text);
         }
     }
 }
