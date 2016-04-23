@@ -8,14 +8,22 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="650"
-    HorizontalAlignment="Stretch">
+    HorizontalAlignment="Stretch"
+    Name="ucDataItem">
     <Grid Name="grdDataItem" HorizontalAlignment="Stretch">
         <StackPanel Margin="5,5,5,30" HorizontalAlignment="Stretch">
             <TextBlock>网站：</TextBlock>
             <TextBlock Text="{Binding WebSite}"/>
             <TextBlock>账户：</TextBlock>
             <TextBlock Text="{Binding Account}"/>
-            <Button Name="btnDetail" Click="btnDetail_Click" Content="Detail" HorizontalAlignment="Right"/>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Name="btnModify" 
+                        Content="修改" Margin="0,0,10,0" />
+                <!--Command="{Binding ModifyInCmd}"
+                        CommandParameter="{Binding ElementName=ucDataItem,Path=DataContext}"-->
+                <Button Name="btnDetail" Click="btnDetail_Click" Content="展开" />
+            </StackPanel>
             <StackPanel Name="stkpDetail"
                         Visibility="Collapsed">
                 <TextBlock>密码：</TextBlock>

@@ -38,6 +38,11 @@ namespace PasswordSaver
             //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
             StorageFile savedFile = await RoamingFolder.CreateFileAsync("dataFile", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(savedFile, str);
+
+            //测试数据量是否超过100k
+            //StorageFolder storageFolder = KnownFolders.PicturesLibrary;
+            //StorageFile sfile = await storageFolder.CreateFileAsync("a", CreationCollisionOption.ReplaceExisting);
+            //await FileIO.WriteTextAsync(sfile, str);
         }
 
         public async static Task<string> ReadRoamingDataAsync()

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PasswordSaver.Models
 {
     [DataContract]
-    public class RecordItem
+    public class RecordItem:NotificationObject
     {
         string _webSite;
         [DataMember]
@@ -22,6 +22,7 @@ namespace PasswordSaver.Models
             set
             {
                 _webSite = value;
+                RaisedPropertyChanged("WebSite");
             }
         }
 
@@ -37,6 +38,7 @@ namespace PasswordSaver.Models
             set
             {
                 _account = value;
+                RaisedPropertyChanged("Account");
             }
         }
 
@@ -52,6 +54,7 @@ namespace PasswordSaver.Models
             set
             {
                 _pwd = value;
+                RaisedPropertyChanged("Pwd");
             }
         }
 
@@ -67,6 +70,7 @@ namespace PasswordSaver.Models
             set
             {
                 _note = value;
+                RaisedPropertyChanged("Note");
             }
         }
 
@@ -76,6 +80,10 @@ namespace PasswordSaver.Models
             Account = accout;
             Pwd = pwd;
             Note = note;
+        }
+        public RecordItem()
+        {
+
         }
     }
 }

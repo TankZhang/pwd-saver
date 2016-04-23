@@ -30,7 +30,8 @@ namespace PasswordSaver
         public MainPage()
         {
             this.InitializeComponent() ;
-            this.DataContext = VM; 
+            this.DataContext = VM;
+            //ucPwdModify.DataContext = VM.RecordItemTemp2;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -45,25 +46,25 @@ namespace PasswordSaver
             {
                 VM.IsCheck = false;
                 grdAdd.Visibility = Visibility.Collapsed;
-                grdList.Visibility = Visibility.Collapsed;
+                grdPwds.Visibility = Visibility.Collapsed;
                 grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiList.IsSelected)
             {
                 grdAdd.Visibility = Visibility.Collapsed;
-                grdList.Visibility = Visibility.Visible;
+                grdPwds.Visibility = Visibility.Visible;
                 grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiAdd.IsSelected)
             {
                 grdAdd.Visibility = Visibility.Visible;
-                grdList.Visibility = Visibility.Collapsed;
+                grdPwds.Visibility = Visibility.Collapsed;
                 grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiSet.IsSelected)
             {
                 grdAdd.Visibility = Visibility.Collapsed;
-                grdList.Visibility = Visibility.Collapsed;
+                grdPwds.Visibility = Visibility.Collapsed;
                 grdSet.Visibility = Visibility.Visible;
             }
         }
@@ -81,10 +82,13 @@ namespace PasswordSaver
 
         private void btnList_Click(object sender, RoutedEventArgs e)
         {
-            VM.RecordItems.Add(new Models.RecordItem("hfdsfdsafsfsdafasfasfafdafdasfafddafsadfasf",
-                "hfasdfdfasdfasfffffffddddddddddddddddddddddddddddddddssssssssssssssssssasfdsafdsafdsafdas", 
-                "hfdsafdsfasdfdadsfadffdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsasdf",
-                "hfdsfdsafasdfasdfdfghgjhgjytuerytryreytfhgfhncvbvnghfjhfdfafasdfsadfdsafadsfsdafsafsdafsad"));
+            VM.RecordItems.Add(new Models.RecordItem(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff"),
+                "hfasdfdfasdfasfffffffddddddddddddddddddddddddddddddddssssssfdsafsdafssssssssssssasfdsafdsafdsafdas",
+                "hfdsafdsfasdfdadsfadffddddddddddddddddddddddddddddddddddddfdsafdddddddddddddddddddddddddddsasdf",
+                "hfdsfdsafasdfasdfdfghgjhgjytuerytryreytfhgfhncvbvnghfjhfdffsdafafafasdfsadfdsafadsfsdafsafsdafsad"));
+            Debug.WriteLine(VM.RecordItems.Count.ToString());
+            //VM.RecordItems[3].WebSite = "更改之后的！";
+            //string s = "da";
         }
 
         private async void btnChangeCode_Click(object sender, RoutedEventArgs e)
@@ -103,6 +107,29 @@ namespace PasswordSaver
             str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
             await FileManager.WriteToRoamingDataAsync(str);
             VM.IsProgressRingVisible = false;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            var a = (StackPanel)VisualTreeHelper.GetParent(btn);
+            RecordItem recordItem = new RecordItem();
+            foreach (var item in a.Children)
+            {
+                if(item.GetType().ToString() == "PasswordSaver.UcDataItem")
+                {
+                    recordItem = ((UcDataItem)item).DataContext as RecordItem;
+                }
+                Debug.WriteLine(item.GetType());
+                //
+            }
+
+            VM.ModifyIn(recordItem);
+        }
+
+        private void lstvList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿<UserControl
+    x:Class="PasswordSaver.UcItemDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PasswordSaver"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="800"
+    d:DesignWidth="450"
+    Name="ucItemDetail">
+
+    <Grid>
+        <RelativePanel>
+            <StackPanel Name="stkpInfo" RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch">
+                <TextBlock>网站：</TextBlock>
+                <TextBlock Text="{Binding RecordItemTemp2.WebSite}"/>
+                <TextBlock>账户：</TextBlock>
+                <TextBlock Text="{Binding RecordItemTemp2.Account}"/>
+                <TextBlock>密码：</TextBlock>
+                <TextBlock Text="{Binding RecordItemTemp2.Pwd}"/>
+                <TextBlock>备注：</TextBlock>
+                <TextBlock Text="{Binding RecordItemTemp2.Note}"/>
+            </StackPanel>
+            <StackPanel Name="stkpBtn" 
+                        RelativePanel.Below="stkpInfo"
+                        Orientation="Horizontal">
+                <Button Name="btnModify"
+                        Content="修改"
+                        Command="{Binding ModifyCmd}"
+                        CommandParameter="{Binding ElementName=ucItemDetail,Path=DataContext}"
+                        />
+                <Button Name="btnSave"
+                        Content="保存"
+                        />
+            </StackPanel>
+        </RelativePanel>
+    </Grid>
+</UserControl>

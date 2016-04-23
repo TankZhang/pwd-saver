@@ -28,10 +28,22 @@ namespace PasswordSaver
         private void btnDetail_Click(object sender, RoutedEventArgs e)
         {
             if (stkpDetail.Visibility == Visibility.Visible)
+            {
                 stkpDetail.Visibility = Visibility.Collapsed;
+                btnDetail.Content = "展开";
+            }
             else
-                stkpDetail.Visibility = Visibility.Visible;
+            { 
+            stkpDetail.Visibility = Visibility.Visible;
+                btnDetail.Content = "收起";
+            }
             Debug.WriteLine(grdDataItem.ActualWidth);
         }
+
+        private void btnModify_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
     }
 }
