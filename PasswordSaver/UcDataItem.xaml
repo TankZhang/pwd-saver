@@ -19,7 +19,8 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
                 <Button Name="btnModify" 
-                        Content="修改" Margin="0,0,10,0" />
+                        Content="修改" Margin="0,0,10,0" 
+                        Click="btnModify_Click"/>
                 <!--Command="{Binding ModifyInCmd}"
                         CommandParameter="{Binding ElementName=ucDataItem,Path=DataContext}"-->
                 <Button Name="btnDetail" Click="btnDetail_Click" Content="展开" />

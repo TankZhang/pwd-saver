@@ -33,17 +33,26 @@ namespace PasswordSaver
                 btnDetail.Content = "展开";
             }
             else
-            { 
-            stkpDetail.Visibility = Visibility.Visible;
+            {
+                stkpDetail.Visibility = Visibility.Visible;
                 btnDetail.Content = "收起";
             }
-            Debug.WriteLine(grdDataItem.ActualWidth);
+            //Debug.WriteLine(grdDataItem.ActualWidth);
         }
 
+        //修改项目，读到当前所在的父控件，不断向上，找到VM，调用其ModifyIn方法。
         private void btnModify_Click(object sender, RoutedEventArgs e)
         {
-
+            Debug.WriteLine(this.DataContext);
+            var a = VisualTreeHelper.GetParent(this);
+            a = VisualTreeHelper.GetParent(a);
+            a = VisualTreeHelper.GetParent(a);
+            //a = VisualTreeHelper.GetParent(a);
+            //a = VisualTreeHelper.GetParent(a);
+            //Debug.WriteLine(a);
+            //Debug.WriteLine(((ItemsStackPanel)a).DataContext);
+            ((ViewModel)((ItemsStackPanel)a).DataContext).ModifyIn(this.DataContext);
         }
-        
+
     }
 }

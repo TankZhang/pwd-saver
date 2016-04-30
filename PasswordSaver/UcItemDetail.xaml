@@ -9,18 +9,17 @@
     d:DesignHeight="800"
     d:DesignWidth="450"
     Name="ucItemDetail">
-
     <Grid>
         <RelativePanel>
             <StackPanel Name="stkpInfo" RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch">
                 <TextBlock>网站：</TextBlock>
-                <TextBlock Text="{Binding RecordItemTemp2.WebSite}"/>
+                <TextBox Text="{Binding RecordItemToModify.WebSite ,Mode=TwoWay}"/>
                 <TextBlock>账户：</TextBlock>
-                <TextBlock Text="{Binding RecordItemTemp2.Account}"/>
+                <TextBox Text="{Binding RecordItemToModify.Account ,Mode=TwoWay}"/>
                 <TextBlock>密码：</TextBlock>
-                <TextBlock Text="{Binding RecordItemTemp2.Pwd}"/>
+                <TextBox Text="{Binding RecordItemToModify.Pwd ,Mode=TwoWay}"/>
                 <TextBlock>备注：</TextBlock>
-                <TextBlock Text="{Binding RecordItemTemp2.Note}"/>
+                <TextBox Text="{Binding RecordItemToModify.Note ,Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Name="stkpBtn" 
                         RelativePanel.Below="stkpInfo"
@@ -28,10 +27,11 @@
                 <Button Name="btnModify"
                         Content="修改"
                         Command="{Binding ModifyCmd}"
-                        CommandParameter="{Binding ElementName=ucItemDetail,Path=DataContext}"
+                        Visibility="{Binding IsModifyOrAdd,Converter={StaticResource visibleConverter}}"
                         />
                 <Button Name="btnSave"
                         Content="保存"
+                        Visibility="{Binding IsModifyOrAdd,Converter={StaticResource collapseConverter}}"
                         />
             </StackPanel>
         </RelativePanel>

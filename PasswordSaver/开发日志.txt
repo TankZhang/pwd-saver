@@ -5,6 +5,10 @@
 开始运行，显示计算器界面，生成VM时候得到内存中的密码的MD5校验值RightPwdMd5。当输入的数字得到的MD5校验值与RightPwdMd5相同时将IsCheck设置为True。同时解出密码信息，显示密码信息列表。
 #2016年4月23日10:55:18
 尝试各种办法。但是DataTemplate中的控件中的按钮无法绑定到VM中的命令上面去。改变策略，直接使用click到MainPage后台进行更改，然后找出父控件，得到UcDataItem的子控件，得到它的DataContext进行修改！
+#2016年4月30日11:16:18
+一周没提交了，项目搞得很烦。
+完成修改条目功能。
+调整布局。将grdPwdsList和ucItemDetail放到同一等级。在SplitView.Pane中点击收藏夹会转至grdPwdsList（通过codeBehind），在grdPwdsList中点击修改，会转至ucItemDetail（通过VM中的ModifyIn函数，其中记录RecordItemMemory和RecordItemToModify，并将IsUcItemDetailVisible可见，IsGrdPwdsListVisible隐藏，IsModifyOrAdd设置为true，即Modify，并且显示back按钮和title为修改条目）。在Modify的ucItemDetail中可以修改，然后点击修改会通过VM.ModifyData来处理并返回收藏列表。
 
 
 

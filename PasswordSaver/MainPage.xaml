@@ -8,15 +8,12 @@
     xmlns:data="using:PasswordSaver.Models"
     mc:Ignorable="d"
     Loaded="Page_Loaded">
-    <Page.Resources>
-        <local:CollapseBindingHelper x:Key="collapseConverter"/>
-        <local:VisibleBindingHelper x:Key="visibleConverter"/>
-    </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!--第一行的汉堡菜单，title，以及返回按钮-->
         <RelativePanel>
             <Button Name="btnHamburg"
                     RelativePanel.AlignLeftWithPanel="True"
@@ -27,11 +24,22 @@
                     Height="45"
                     HorizontalAlignment="Center"
                     Click="btnHamburg_Click"/>
+            <Button Name="btnBack"
+                    Command="{Binding BackCmd}"
+                    RelativePanel.RightOf="btnHamburg"
+                    FontFamily="Segoe MDL2 Assets"
+                    Content="&#xE0A6;"
+                    FontSize="20"
+                    Width="45"
+                    Height="45"
+                    Visibility="{Binding IsBackVisible,Converter={StaticResource visibleConverter}}"/>
             <TextBlock Name="tblTitle"
-                       RelativePanel.RightOf="btnHamburg"
+                       RelativePanel.RightOf="btnBack"
                        FontSize="18"
                        FontWeight="Bold"
                        Margin="20,0,0,0"
+                       Text="{Binding Title}"
+                       RelativePanel.AlignVerticalCenterWithPanel="True"
                        />
         </RelativePanel>
         <SplitView Grid.Row="1"
@@ -92,46 +100,37 @@
                 <Grid>
                     <ProgressRing Name="prgrsrWaite" 
                                   IsActive="True"
-                                  Visibility="{Binding IsProgressRingVisible,Converter={StaticResource visibleConverter}}"
+                                  Visibility="{Binding IsProgressRingVisible,Converter={StaticResource visibleConverter},Mode=TwoWay}"
                                   Height="150"
                                   Width="150"/>
-                    <Grid Name="grdPwds"
-                          Visibility="Collapsed">
-                        <Grid Name="grdPwdsList"
-                              Visibility="{Binding IsGrdPwdsListVisible,Converter={StaticResource visibleConverter}}">
-                            <ScrollViewer>
-                                <StackPanel Orientation="Vertical">
-                                    <Button Name="btnList" Click="btnList_Click">添加</Button>
-                                    <Button Name="btnSave" Click="btnSave_Click">保存</Button>
-                                    <Button Name="btnChangeCode" Click="btnChangeCode_Click">改密码</Button>
-                                    <ListView ItemsSource="{x:Bind VM.RecordItems}"
+                    <!--收藏夹的显示grid-->
+                    <Grid Name="grdPwdsList"
+                              Visibility="{Binding IsGrdPwdsListVisible,Converter={StaticResource visibleConverter},Mode=TwoWay}">
+                        <ScrollViewer>
+                            <StackPanel Orientation="Vertical">
+                                <Button Name="btnList" Click="btnList_Click">按照日期添加条目</Button>
+                                <Button Name="btnSave" Click="btnSave_Click">保存当前条目至内存</Button>
+                                <Button Name="btnChangeCode" Click="btnChangeCode_Click">修改密码至321</Button>
+                                <ListView ItemsSource="{x:Bind VM.RecordItems}"
                                               Name="lstvList"
-                                              SelectionChanged="lstvList_SelectionChanged">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate x:DataType="data:RecordItem">
-                                                <StackPanel>
-                                                    <local:UcDataItem x:Name="ucDataItem"/>
-                                                    <Button  Content="ceshis"
-                                                             Name="btnxiugai"
-                                                             Click="Button_Click_1"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </StackPanel>
-                            </ScrollViewer>
-                        </Grid>
-                        <local:UcItemDetail x:Name="ucPwdModify"
-                                            Visibility="{Binding IsUcPwdModifyVisible,Converter={StaticResource visibleConverter}}"/>
+                                              SelectionMode="None">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="data:RecordItem">
+                                            <local:UcDataItem x:Name="ucDataItem"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
-                    <Grid Name="grdAdd"
-                          Visibility="Collapsed">
-                        <Button>add</Button>
-                    </Grid>
+                    <!--添加或者修改的控件显示-->
+                    <local:UcItemDetail x:Name="ucItemDetail"
+                                            Visibility="{Binding IsUcItemDetailVisible,Converter={StaticResource visibleConverter}}"/>
                     <Grid Name="grdSet"
                           Visibility="Collapsed">
                         <Button>set</Button>
                     </Grid>
+                    <!--进入界面计算器的显示-->
                     <local:UcCalculate Visibility="{Binding IsCheck,Converter={StaticResource collapseConverter},Mode=TwoWay}"/>
                 </Grid>
             </SplitView.Content>

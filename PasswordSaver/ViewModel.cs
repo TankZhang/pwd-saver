@@ -75,18 +75,18 @@ namespace PasswordSaver
             }
         }
 
-        bool _isUcPwdModifyVisible;
-        public bool IsUcPwdModifyVisible
+        bool _isUcItemDetailVisible;
+        public bool IsUcItemDetailVisible
         {
             get
             {
-                return _isUcPwdModifyVisible;
+                return _isUcItemDetailVisible;
             }
 
             set
             {
-                _isUcPwdModifyVisible = value;
-                RaisedPropertyChanged("IsUcPwdModifyVisible");
+                _isUcItemDetailVisible = value;
+                RaisedPropertyChanged("IsUcItemDetailVisible");
             }
         }
 
@@ -163,33 +163,79 @@ namespace PasswordSaver
             }
         }
 
-        RecordItem _recordItemTemp1;
-        public RecordItem RecordItemTemp1
+        RecordItem _recordItemMemory;
+        public RecordItem RecordItemMemory
         {
             get
             {
-                return _recordItemTemp1;
+                return _recordItemMemory;
             }
 
             set
             {
-                _recordItemTemp1 = value;
-                RaisedPropertyChanged("RecordItemTemp");
+                _recordItemMemory = value;
+                RaisedPropertyChanged("RecordItemMemory");
             }
         }
 
-        RecordItem _recordItemTemp2;
-        public RecordItem RecordItemTemp2
+        RecordItem _recordItemToModify;
+        public RecordItem RecordItemToModify
         {
             get
             {
-                return _recordItemTemp2;
+                return _recordItemToModify;
             }
 
             set
             {
-                _recordItemTemp2 = value;
-                RaisedPropertyChanged("RecordItemTemp2");
+                _recordItemToModify = value;
+                RaisedPropertyChanged("RecordItemToModify");
+            }
+        }
+
+        bool _isModifyOrAdd;
+        //Modify为true
+        public bool IsModifyOrAdd
+        {
+            get
+            {
+                return _isModifyOrAdd;
+            }
+
+            set
+            {
+                _isModifyOrAdd = value;
+                RaisedPropertyChanged("IsModifyOrAdd");
+            }
+        }
+
+        bool _isBackVisible;
+        public bool IsBackVisible
+        {
+            get
+            {
+                return _isBackVisible;
+            }
+
+            set
+            {
+                _isBackVisible = value;
+                RaisedPropertyChanged("IsBackVisible");
+            }
+        }
+
+        string _title;
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }
+
+            set
+            {
+                _title = value;
+                RaisedPropertyChanged("Title");
             }
         }
         #endregion
@@ -223,6 +269,23 @@ namespace PasswordSaver
             }
         }
 
+        ICommand _backCmd;
+        public ICommand BackCmd
+        {
+            get
+            {
+                return _backCmd;
+            }
+
+            set
+            {
+                _backCmd = value;
+                RaisedPropertyChanged("BackCmd");
+            }
+        }
+
+
+
 
 
 
@@ -248,40 +311,55 @@ namespace PasswordSaver
                 IsCheck = false;
         }
 
-        //更改数据
-        public async void ModifyData(object o)
+        //更改数据,找到与记忆条目相同的，更改之，然后返回去
+        public async void ModifyData()
         {
-            RecordItem recordItem = (RecordItem)o as RecordItem;
             foreach (RecordItem item in RecordItems)
             {
-                if(item.WebSite==RecordItemTemp1.WebSite&& item.Account == RecordItemTemp1.Account)
+                if(item.WebSite==RecordItemMemory.WebSite&& item.Account == RecordItemMemory.Account)
                 {
-                    item.WebSite = recordItem.WebSite;
-                    item.Account = recordItem.Account;
-                    item.Pwd = recordItem.Pwd;
-                    item.Note = recordItem.Note;
+                    item.WebSite = RecordItemToModify.WebSite;
+                    item.Account = RecordItemToModify.Account;
+                    item.Pwd = RecordItemToModify.Pwd;
+                    item.Note = RecordItemToModify.Note;
                     break;
                 }
             }
             await SaveRecordAsync();
+            IsUcItemDetailVisible = false;
+            IsGrdPwdsListVisible = true;
+            IsBackVisible = false;
+            Title = "收藏列表";
         }
 
-        //进入更改数据的设置
+        //进入更改数据的设置,RecordItemMemory为记忆条目，RecordItemToModify为被绑定待修改条目
         public void ModifyIn(object o)
         {
             RecordItem recordItem = (RecordItem)o as RecordItem;
-            RecordItemTemp1.WebSite = recordItem.WebSite;
-            RecordItemTemp1.Account = recordItem.Account;
-            RecordItemTemp1.Pwd = recordItem.Pwd;
-            RecordItemTemp1.Note = recordItem.Note;
-            RecordItemTemp2.WebSite = recordItem.WebSite;
-            RecordItemTemp2.Account = recordItem.Account;
-            RecordItemTemp2.Pwd = recordItem.Pwd;
-            RecordItemTemp2.Note = recordItem.Note;
-            IsUcPwdModifyVisible = true;
+            RecordItemMemory.WebSite = recordItem.WebSite;
+            RecordItemMemory.Account = recordItem.Account;
+            RecordItemMemory.Pwd = recordItem.Pwd;
+            RecordItemMemory.Note = recordItem.Note;
+            RecordItemToModify.WebSite = recordItem.WebSite;
+            RecordItemToModify.Account = recordItem.Account;
+            RecordItemToModify.Pwd = recordItem.Pwd;
+            RecordItemToModify.Note = recordItem.Note;
+            IsUcItemDetailVisible = true;
             IsGrdPwdsListVisible = false;
+            IsModifyOrAdd = true;
+            IsBackVisible = true;
+            Title = "修改条目";
         }
 
+        //返回函数
+        public void Back()
+        {
+            IsUcItemDetailVisible = false;
+            IsGrdPwdsListVisible = true;
+            IsBackVisible = false;
+            Title = "收藏列表";
+            Debug.WriteLine("back!!!");
+        }
         //将当前的RecordItems保存到内存中
         private async Task SaveRecordAsync()
         {
@@ -312,14 +390,17 @@ namespace PasswordSaver
         {
             IsCheck = false;
             IsProgressRingVisible = false;
-            IsGrdPwdsListVisible = true;
-            IsUcPwdModifyVisible = false;
-            ModifyCmd = new RelayCommand(new Action<object>(ModifyData));
+            IsGrdPwdsListVisible = false;
+            IsUcItemDetailVisible = false;
+            ModifyCmd = new RelayCommand(new Action(ModifyData));
             ModifyInCmd=new RelayCommand(new Action<object>(ModifyIn));
+            BackCmd = new RelayCommand(new Action(Back));
             RightPwdMd5 = FileManager.GetCode();
             RecordItems = new ObservableCollection<RecordItem>();
-            RecordItemTemp1 = new RecordItem();
-            RecordItemTemp2 = new RecordItem();
+            RecordItemMemory = new RecordItem();
+            RecordItemToModify = new RecordItem();
+            IsBackVisible = false;
+            Title = "主页";
         }
     }
 }
