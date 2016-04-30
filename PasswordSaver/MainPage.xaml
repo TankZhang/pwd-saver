@@ -98,6 +98,19 @@
                                        Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
+                    <!--Pane中退出按钮-->
+                    <ListBoxItem Name="lstiQuit"
+                                 Visibility="{Binding IsCheck,Converter={StaticResource visibleConverter},Mode=TwoWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets"
+                                       Text="&#xe711;"
+                                       FontSize="20"/>
+                            <TextBlock Text="退出"
+                                       FontSize="18"
+                                       Margin="20,0,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                                 
                 </ListBox>
             </SplitView.Pane>
             <SplitView.Content>
@@ -128,7 +141,7 @@
                     <!--设置部分的grid-->
                     <Grid Name="grdSet"
                           Visibility="Collapsed">
-                        <Button>set</Button>
+                        <local:UcSettings />
                     </Grid>
                     <!--进入界面计算器的显示-->
                     <local:UcCalculate Visibility="{Binding IsCheck,Converter={StaticResource collapseConverter},Mode=TwoWay}"/>

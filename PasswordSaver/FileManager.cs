@@ -15,6 +15,7 @@ namespace PasswordSaver
         public static StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
         public static ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
 
+        //将对象存到jsonstring中去
         public static string GetJsonString<T>(T obj)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
@@ -25,6 +26,7 @@ namespace PasswordSaver
             }
         }
 
+        //从jsonstring中得到想要的对象
         public static T ReadFromJson<T>(string jsonString)
         {
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
@@ -33,6 +35,7 @@ namespace PasswordSaver
             return obj;
         }
 
+        //将str写入RoamingData存储区中
         public async static Task WriteToRoamingDataAsync(string str)
         {
             //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
@@ -45,12 +48,37 @@ namespace PasswordSaver
             //await FileIO.WriteTextAsync(sfile, str);
         }
 
+        //读出RoamingData存储区中的string
         public async static Task<string> ReadRoamingDataAsync()
         {
             try
             {
                 StorageFile savedFile = await RoamingFolder.GetFileAsync("dataFile");
                 return await FileIO.ReadTextAsync(savedFile);
+            }
+            catch
+            {
+                return "-1";
+            }
+        }
+
+        //备份当前数据，将str写到本地存储中
+        public async static Task BackupAsync(string str)
+        {
+            StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
+            StorageFile sfile = await storageFolder.CreateFileAsync("pwsv.pwsv", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(sfile, str);
+        }
+
+        //读出备份数据
+        public async static Task<string> ReadBackupAsync()
+        {
+            StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
+            try
+            {
+                StorageFile sfile = await storageFolder.GetFileAsync("pwsv.pwsv");
+                string str = await FileIO.ReadTextAsync(sfile);
+                return str;
             }
             catch
             {
@@ -65,9 +93,9 @@ namespace PasswordSaver
         }
 
         //写入设置
-        private static void WriteSetting(string set,string value)
+        private static void WriteSetting(string set, string value)
         {
-            RoamingSettings.Values[set] =value;
+            RoamingSettings.Values[set] = value;
         }
 
         //读出密码
@@ -77,7 +105,7 @@ namespace PasswordSaver
             if (!String.IsNullOrEmpty(str))
                 return str;
             else
-            return EncryptHelper.PwdEncrypt("123");
+                return EncryptHelper.PwdEncrypt("123");
         }
     }
     /*

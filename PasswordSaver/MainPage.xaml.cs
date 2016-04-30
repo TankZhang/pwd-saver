@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,12 +32,18 @@ namespace PasswordSaver
         {
             this.InitializeComponent() ;
             this.DataContext = VM;
+            SystemNavigationManager m = SystemNavigationManager.GetForCurrentView();
+            m.BackRequested += Quit;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);      
+        }
 
-            Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);      
+        private void Quit(object sender, BackRequestedEventArgs e)
+        {
+            App.Current.Exit();
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -72,6 +79,10 @@ namespace PasswordSaver
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Collapsed;
                 grdSet.Visibility = Visibility.Visible;
+            }
+            if (lstiQuit.IsSelected)
+            {
+                App.Current.Exit();
             }
         }
 
@@ -114,3 +125,45 @@ namespace PasswordSaver
         
     }
 }
+#region 双击返回代码
+//public MainPage()
+//{
+//    this.InitializeComponent();
+//    var m = SystemNavigationManager.GetForCurrentView();
+//    m.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+//    m.BackRequested += M_BackRequested;
+//}
+
+//private void M_BackRequested(object sender, BackRequestedEventArgs e)
+//{
+//    Frame rootFrame = Window.Current.Content as Frame;
+//    if (rootFrame == null)
+//        return;
+
+//    // Navigate back if possible, and if the event has not 
+//    // already been handled .
+//    if (rootFrame.CanGoBack && e.Handled == false)
+//    {
+//        e.Handled = true;
+//        rootFrame.GoBack();
+//    }
+//    else if (!rootFrame.CanGoBack && e.Handled == false)
+//    {
+//        if (b)
+//        {
+//            App.Current.Exit();
+//        }
+//        else
+//        {
+//            b = true;
+//            Task.Run(async () =>
+//            {
+//                await Task.Delay(1500);
+//                b = false;
+//            });
+//        }
+
+//    }
+//}
+//bool b = false;
+#endregion

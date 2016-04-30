@@ -20,9 +20,20 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name=".pwsv">
+            <uap:DisplayName>Pwsv</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.pwsv</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <uap:Capability Name="documentsLibrary" />
   </Capabilities>
 </Package>

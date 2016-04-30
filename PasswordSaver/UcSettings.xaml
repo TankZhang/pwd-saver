@@ -1,0 +1,63 @@
+﻿<UserControl
+    x:Class="PasswordSaver.UcSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PasswordSaver"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="800"
+    d:DesignWidth="450">
+
+    <Grid>
+        <StackPanel Name="stkpMain">
+            <Button Name="btnChangePwd"
+                    Content="修改密码"
+                    Click="btnChangePwd_Click"
+                    />
+            <!--隐藏的修改密码stackpanel-->
+            <StackPanel Name="stkpChangePwd"
+                        Visibility="Collapsed"
+                        >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center">请输入原密码：</TextBlock>
+                    <TextBox Name="tbxOldPwd" GotFocus="tbxOldPwd_GotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center">请输入新密码：</TextBlock>
+                    <PasswordBox PasswordChar="*" 
+                                 Name="pwbxNewPwd"
+                                 GotFocus="pwbxNewPwd_GotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center">请确认新密码：</TextBlock>
+                    <PasswordBox PasswordChar="*" 
+                                 Name="pwbxNewPwdConfirm"
+                                 GotFocus="pwbxNewPwdConfirm_GotFocus"/>
+                </StackPanel>
+                <Button Name="btnChangePwdConfirm"
+                        Content="确认修改"
+                        Click="btnChangePwdConfirm_Click"
+                        />
+            </StackPanel>
+            <Button Name="btnBackup"
+                    Content="备份数据"
+                    Click="btnBackup_Click"
+                    />
+            <!--隐藏的备份数据的stackpanel-->
+            <StackPanel Name="stkpBackup"
+                        Visibility="Collapsed">
+                <TextBlock TextWrapping="Wrap">请务必注意，当您在所有的设备上卸载此软件时，微软不再保存您在云端的数据。因此当您在所有的设备上卸载此软件之前，务必将数据保存到当地，路径为：文档->pwsv.pwsv。此数据中包含您的密码信息，请妥善保管，当您重新安装此软件时，可以通过文档中的pwsv.pwsv文件恢复备份。</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="btnStartBackup"
+                            Content="开始备份"
+                            Click="btnStartBackup_Click"/>
+                    <Button Name="btnRecoverBackup"
+                            Content="恢复备份"
+                            Click="btnRecoverBackup_Click"/>
+                </StackPanel>
+                <TextBlock Text="{Binding BackupResult}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

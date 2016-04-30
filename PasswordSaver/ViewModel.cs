@@ -193,8 +193,8 @@ namespace PasswordSaver
             }
         }
 
-        bool _isModifyOrAdd;
         //Modify为true
+        bool _isModifyOrAdd;
         public bool IsModifyOrAdd
         {
             get
@@ -238,6 +238,22 @@ namespace PasswordSaver
                 RaisedPropertyChanged("Title");
             }
         }
+
+        string _backupResult;
+        public string BackupResult
+        {
+            get
+            {
+                return _backupResult;
+            }
+
+            set
+            {
+                _backupResult = value;
+                RaisedPropertyChanged("BackupResult");
+            }
+        }
+
         #endregion
 
         #region 各类命令
@@ -284,6 +300,7 @@ namespace PasswordSaver
                 RaisedPropertyChanged("AddCmd");
             }
         }
+
 
 
 
@@ -345,13 +362,13 @@ namespace PasswordSaver
         //添加新条目，如果没有相同网站和相同账号，添加之，并保存，并显示列表。
         public async void AddData()
         {
-            if(string.IsNullOrEmpty(RecordItemToModify.WebSite))
+            if (string.IsNullOrEmpty(RecordItemToModify.WebSite))
             {
                 RecordItemToModify.WebSite = "错误！网站名称不能为空";
                 return;
             }
             int index = FindIndexOf(RecordItemToModify.WebSite, RecordItemToModify.Account);
-            if(index>-1)
+            if (index > -1)
             {
                 RecordItemToModify.WebSite = "错误！已存在当前网站";
                 RecordItemToModify.Account = "错误！已存在当前账户";
@@ -359,7 +376,7 @@ namespace PasswordSaver
             else
             {
                 RecordItem r = new RecordItem();
-                CopyRecordItem(RecordItemToModify,r);
+                CopyRecordItem(RecordItemToModify, r);
                 RecordItems.Add(r);
                 await SaveRecordAsync();
                 IsUcItemDetailVisible = false;
@@ -387,8 +404,51 @@ namespace PasswordSaver
             Title = "收藏列表";
         }
 
+        //修改密码，修改当前密码，然后修改后将新密码与新数据重新存入roamingdata
+        public async void ChangePwd(string pwd)
+        {
+            FileManager.WriteCode(pwd);
+            RightPwd = pwd;
+            RightPwdMd5 = FileManager.GetCode();
+            await SaveRecordAsync();
+        }
+
+        //备份函数，将当前的数据用密码“123”保存到本地
+        public async void BackupAsync()
+        {
+            IsProgressRingVisible = true;
+            string jsonStr = FileManager.GetJsonString<ObservableCollection<RecordItem>>(RecordItems);
+            string encryptStr = EncryptHelper.DESEncrypt("123", jsonStr);
+            await FileManager.BackupAsync(encryptStr);
+            BackupResult = "备份成功！";
+            IsProgressRingVisible = false;
+        }
+
+        //读出备份数据，同时将备份数据写入本地文件
+        public async void ReadBackupAsync()
+        {
+            IsProgressRingVisible = true;
+            string str = await FileManager.ReadBackupAsync();
+            if (str == "-1")
+            {
+                IsProgressRingVisible = false;
+                BackupResult = "恢复失败，请检查本地文件！";
+                return;
+            }
+            else
+            {
+                string decryptStr = EncryptHelper.DESDecrypt("123", str);
+                RecordItems.Clear();
+                foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
+                { RecordItems.Add(item); }
+                await SaveRecordAsync();
+                BackupResult = "恢复成功！";
+                IsProgressRingVisible = false;
+            }
+        }
+
         //复制条目
-        private void CopyRecordItem(RecordItem copyFrom,RecordItem copyTo)
+        private void CopyRecordItem(RecordItem copyFrom, RecordItem copyTo)
         {
             copyTo.WebSite = copyFrom.WebSite;
             copyTo.Account = copyFrom.Account;
@@ -397,7 +457,7 @@ namespace PasswordSaver
         }
 
         //找到条目列表中的某个数据的下标
-        private int FindIndexOf(string website,string account)
+        private int FindIndexOf(string website, string account)
         {
             for (int i = 0; i < RecordItems.Count; i++)
             {
