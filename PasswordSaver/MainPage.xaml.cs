@@ -36,7 +36,7 @@ namespace PasswordSaver
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
 
-            Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);   
+            Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);      
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
