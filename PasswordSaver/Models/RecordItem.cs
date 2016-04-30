@@ -83,7 +83,6 @@ namespace PasswordSaver.Models
         }
         public RecordItem()
         {
-
         }
     }
 }

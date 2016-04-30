@@ -50,6 +50,7 @@
             <SplitView.Pane>
                 <ListBox SelectionMode="Single"
                          SelectionChanged="ListBox_SelectionChanged">
+                    <!--Pane中主页按钮-->
                     <ListBoxItem Name="lstiMain">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -60,6 +61,7 @@
                                        Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
+                    <!--Pane中收藏按钮-->
                     <ListBoxItem Name="lstiList"
                                  Visibility="{Binding IsCheck,Converter={StaticResource visibleConverter},Mode=TwoWay}"
                                  IsSelected="{Binding IsListVisible,Mode=TwoWay}">
@@ -72,6 +74,7 @@
                                        Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
+                    <!--Pane中添加按钮-->
                     <ListBoxItem Name="lstiAdd"
                                  Visibility="{Binding IsCheck,Converter={StaticResource visibleConverter},Mode=TwoWay}">
                         <StackPanel Orientation="Horizontal">
@@ -83,6 +86,7 @@
                                        Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
+                    <!--Pane中设置按钮-->
                     <ListBoxItem Name="lstiSet"
                                  Visibility="{Binding IsCheck,Converter={StaticResource visibleConverter},Mode=TwoWay}">
                         <StackPanel Orientation="Horizontal">
@@ -98,11 +102,6 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid>
-                    <ProgressRing Name="prgrsrWaite" 
-                                  IsActive="True"
-                                  Visibility="{Binding IsProgressRingVisible,Converter={StaticResource visibleConverter},Mode=TwoWay}"
-                                  Height="150"
-                                  Width="150"/>
                     <!--收藏夹的显示grid-->
                     <Grid Name="grdPwdsList"
                               Visibility="{Binding IsGrdPwdsListVisible,Converter={StaticResource visibleConverter},Mode=TwoWay}">
@@ -126,12 +125,19 @@
                     <!--添加或者修改的控件显示-->
                     <local:UcItemDetail x:Name="ucItemDetail"
                                             Visibility="{Binding IsUcItemDetailVisible,Converter={StaticResource visibleConverter}}"/>
+                    <!--设置部分的grid-->
                     <Grid Name="grdSet"
                           Visibility="Collapsed">
                         <Button>set</Button>
                     </Grid>
                     <!--进入界面计算器的显示-->
                     <local:UcCalculate Visibility="{Binding IsCheck,Converter={StaticResource collapseConverter},Mode=TwoWay}"/>
+                    <!--显示等待的ProgressRing-->
+                    <ProgressRing Name="prgrsrWaite" 
+                                  IsActive="True"
+                                  Visibility="{Binding IsProgressRingVisible,Converter={StaticResource visibleConverter},Mode=TwoWay}"
+                                  Height="150"
+                                  Width="150"/>
                 </Grid>
             </SplitView.Content>
         </SplitView>

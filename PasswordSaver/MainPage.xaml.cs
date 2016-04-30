@@ -63,6 +63,7 @@ namespace PasswordSaver
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Collapsed;
                 grdSet.Visibility = Visibility.Collapsed;
+                VM.GoToAdd();
 
             }
             if (lstiSet.IsSelected)

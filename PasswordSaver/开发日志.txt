@@ -8,7 +8,13 @@
 #2016年4月30日11:16:18
 一周没提交了，项目搞得很烦。
 完成修改条目功能。
-调整布局。将grdPwdsList和ucItemDetail放到同一等级。在SplitView.Pane中点击收藏夹会转至grdPwdsList（通过codeBehind），在grdPwdsList中点击修改，会转至ucItemDetail（通过VM中的ModifyIn函数，其中记录RecordItemMemory和RecordItemToModify，并将IsUcItemDetailVisible可见，IsGrdPwdsListVisible隐藏，IsModifyOrAdd设置为true，即Modify，并且显示back按钮和title为修改条目）。在Modify的ucItemDetail中可以修改，然后点击修改会通过VM.ModifyData来处理并返回收藏列表。
+调整布局。将grdPwdsList和ucItemDetail放到同一等级。
+在SplitView.Pane中点击收藏夹会转至grdPwdsList（通过codeBehind）。
+在grdPwdsList中点击修改，会转至ucItemDetail（通过VM中的ModifyIn函数，其中记录RecordItemMemory和RecordItemToModify，并将IsUcItemDetailVisible可见，IsGrdPwdsListVisible隐藏，IsModifyOrAdd设置为true，即Modify，并且显示back按钮和title为修改条目）。
+在Modify的ucItemDetail中可以修改，然后点击修改会通过VM.ModifyData来处理并返回收藏列表。
+#2016年4月30日15:31:14
+加入Add功能，点击菜单中的Add进入ucItemDetail，输入后点击保存，首先检查格式，再检查是否已经存在当前网站和账号，再通过保存实现。
+加入DeleteData功能，通过在UcDataItem中点击删除，调用VM的DeleteData，首先去掉本地RecordItems中的对应数据，然后保存。
 
 
 

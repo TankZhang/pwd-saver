@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using PasswordSaver.Models;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -43,7 +44,7 @@ namespace PasswordSaver
         //修改项目，读到当前所在的父控件，不断向上，找到VM，调用其ModifyIn方法。
         private void btnModify_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine(this.DataContext);
+            //Debug.WriteLine(this.DataContext);
             var a = VisualTreeHelper.GetParent(this);
             a = VisualTreeHelper.GetParent(a);
             a = VisualTreeHelper.GetParent(a);
@@ -51,8 +52,15 @@ namespace PasswordSaver
             //a = VisualTreeHelper.GetParent(a);
             //Debug.WriteLine(a);
             //Debug.WriteLine(((ItemsStackPanel)a).DataContext);
-            ((ViewModel)((ItemsStackPanel)a).DataContext).ModifyIn(this.DataContext);
+            ((ViewModel)((ItemsStackPanel)a).DataContext).GoToModify((RecordItem)this.DataContext);
         }
 
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var a = VisualTreeHelper.GetParent(this);
+            a = VisualTreeHelper.GetParent(a);
+            a = VisualTreeHelper.GetParent(a);
+            ((ViewModel)((ItemsStackPanel)a).DataContext).DeleteData((RecordItem)this.DataContext);
+        }
     }
 }

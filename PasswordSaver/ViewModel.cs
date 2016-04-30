@@ -255,20 +255,6 @@ namespace PasswordSaver
             }
         }
 
-        ICommand _modifyInCmd;
-        public ICommand ModifyInCmd
-        {
-            get
-            {
-                return _modifyInCmd;
-            }
-
-            set
-            {
-                _modifyInCmd = value;
-            }
-        }
-
         ICommand _backCmd;
         public ICommand BackCmd
         {
@@ -284,6 +270,20 @@ namespace PasswordSaver
             }
         }
 
+        ICommand _addCmd;
+        public ICommand AddCmd
+        {
+            get
+            {
+                return _addCmd;
+            }
+
+            set
+            {
+                _addCmd = value;
+                RaisedPropertyChanged("AddCmd");
+            }
+        }
 
 
 
@@ -299,12 +299,10 @@ namespace PasswordSaver
             {
                 IsCheck = true;
                 RightPwd = pwd;
+                //如果现有列表中没有数据，即打开应用的第一次验证
                 if (RecordItems.Count < 1)
                 {
-                    IsProgressRingVisible = true;
-                    string encryptStr = await FileManager.ReadRoamingDataAsync();
                     await ReadRecordAsync();
-                    IsProgressRingVisible = false;
                 }
             }
             else
@@ -314,17 +312,8 @@ namespace PasswordSaver
         //更改数据,找到与记忆条目相同的，更改之，然后返回去
         public async void ModifyData()
         {
-            foreach (RecordItem item in RecordItems)
-            {
-                if(item.WebSite==RecordItemMemory.WebSite&& item.Account == RecordItemMemory.Account)
-                {
-                    item.WebSite = RecordItemToModify.WebSite;
-                    item.Account = RecordItemToModify.Account;
-                    item.Pwd = RecordItemToModify.Pwd;
-                    item.Note = RecordItemToModify.Note;
-                    break;
-                }
-            }
+            int index = FindIndexOf(RecordItemMemory.WebSite, RecordItemMemory.Account);
+            CopyRecordItem(RecordItemToModify, RecordItems[index]);
             await SaveRecordAsync();
             IsUcItemDetailVisible = false;
             IsGrdPwdsListVisible = true;
@@ -333,22 +322,60 @@ namespace PasswordSaver
         }
 
         //进入更改数据的设置,RecordItemMemory为记忆条目，RecordItemToModify为被绑定待修改条目
-        public void ModifyIn(object o)
+        public void GoToModify(RecordItem recordItem)
         {
-            RecordItem recordItem = (RecordItem)o as RecordItem;
-            RecordItemMemory.WebSite = recordItem.WebSite;
-            RecordItemMemory.Account = recordItem.Account;
-            RecordItemMemory.Pwd = recordItem.Pwd;
-            RecordItemMemory.Note = recordItem.Note;
-            RecordItemToModify.WebSite = recordItem.WebSite;
-            RecordItemToModify.Account = recordItem.Account;
-            RecordItemToModify.Pwd = recordItem.Pwd;
-            RecordItemToModify.Note = recordItem.Note;
+            //RecordItem recordItem = (RecordItem)o as RecordItem;
+            CopyRecordItem(recordItem, RecordItemMemory);
+            CopyRecordItem(recordItem, RecordItemToModify);
             IsUcItemDetailVisible = true;
             IsGrdPwdsListVisible = false;
             IsModifyOrAdd = true;
             IsBackVisible = true;
             Title = "修改条目";
+        }
+
+        //进入添加新条目，清空RecordItemToModify，然后让IsUcItemDetailVisible为true
+        public void GoToAdd()
+        {
+            RecordItemToModify = new RecordItem();
+            IsUcItemDetailVisible = true;
+            IsModifyOrAdd = false;
+        }
+
+        //添加新条目，如果没有相同网站和相同账号，添加之，并保存，并显示列表。
+        public async void AddData()
+        {
+            if(string.IsNullOrEmpty(RecordItemToModify.WebSite))
+            {
+                RecordItemToModify.WebSite = "错误！网站名称不能为空";
+                return;
+            }
+            int index = FindIndexOf(RecordItemToModify.WebSite, RecordItemToModify.Account);
+            if(index>-1)
+            {
+                RecordItemToModify.WebSite = "错误！已存在当前网站";
+                RecordItemToModify.Account = "错误！已存在当前账户";
+            }
+            else
+            {
+                RecordItem r = new RecordItem();
+                CopyRecordItem(RecordItemToModify,r);
+                RecordItems.Add(r);
+                await SaveRecordAsync();
+                IsUcItemDetailVisible = false;
+                IsGrdPwdsListVisible = true;
+                IsBackVisible = false;
+                Title = "收藏列表";
+                IsListVisible = true;
+            }
+        }
+
+        //删除条目，
+        public async void DeleteData(RecordItem recordItem)
+        {
+            int index = FindIndexOf(recordItem.WebSite, recordItem.Account);
+            RecordItems.RemoveAt(index);
+            await SaveRecordAsync();
         }
 
         //返回函数
@@ -358,30 +385,56 @@ namespace PasswordSaver
             IsGrdPwdsListVisible = true;
             IsBackVisible = false;
             Title = "收藏列表";
-            Debug.WriteLine("back!!!");
         }
+
+        //复制条目
+        private void CopyRecordItem(RecordItem copyFrom,RecordItem copyTo)
+        {
+            copyTo.WebSite = copyFrom.WebSite;
+            copyTo.Account = copyFrom.Account;
+            copyTo.Pwd = copyFrom.Pwd;
+            copyTo.Note = copyFrom.Note;
+        }
+
+        //找到条目列表中的某个数据的下标
+        private int FindIndexOf(string website,string account)
+        {
+            for (int i = 0; i < RecordItems.Count; i++)
+            {
+                if (RecordItems[i].WebSite == website && RecordItems[i].Account == account)
+                    return i;
+            }
+            return -1;
+        }
+
         //将当前的RecordItems保存到内存中
         private async Task SaveRecordAsync()
         {
+            IsProgressRingVisible = true;
             string jsonStr = FileManager.GetJsonString<ObservableCollection<RecordItem>>(RecordItems);
             string encryptStr = EncryptHelper.DESEncrypt(RightPwd, jsonStr);
             await FileManager.WriteToRoamingDataAsync(encryptStr);
+            IsProgressRingVisible = false;
         }
 
         //将当前内存中的数据读取到RecordItems中
         private async Task<bool> ReadRecordAsync()
         {
+            IsProgressRingVisible = true;
             string encryptStr = await FileManager.ReadRoamingDataAsync();
+            //能够读出数据
             if (encryptStr != "-1")
             {
                 string decryptStr = EncryptHelper.DESDecrypt(RightPwd, encryptStr);
                 RecordItems.Clear();
                 foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
                 { RecordItems.Add(item); }
+                IsProgressRingVisible = false;
                 return true;
             }
             else
             {
+                IsProgressRingVisible = false;
                 return false;
             }
         }
@@ -393,8 +446,8 @@ namespace PasswordSaver
             IsGrdPwdsListVisible = false;
             IsUcItemDetailVisible = false;
             ModifyCmd = new RelayCommand(new Action(ModifyData));
-            ModifyInCmd=new RelayCommand(new Action<object>(ModifyIn));
             BackCmd = new RelayCommand(new Action(Back));
+            AddCmd = new RelayCommand(new Action(AddData));
             RightPwdMd5 = FileManager.GetCode();
             RecordItems = new ObservableCollection<RecordItem>();
             RecordItemMemory = new RecordItem();

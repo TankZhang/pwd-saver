@@ -31,6 +31,7 @@
                         />
                 <Button Name="btnSave"
                         Content="保存"
+                        Command="{Binding AddCmd}"
                         Visibility="{Binding IsModifyOrAdd,Converter={StaticResource collapseConverter}}"
                         />
             </StackPanel>

@@ -23,6 +23,9 @@
                         Click="btnModify_Click"/>
                 <!--Command="{Binding ModifyInCmd}"
                         CommandParameter="{Binding ElementName=ucDataItem,Path=DataContext}"-->
+                <Button Name="btnDelete"
+                        Content="删除" Margin="0,0,10,0"
+                        Click="btnDelete_Click"/>
                 <Button Name="btnDetail" Click="btnDetail_Click" Content="展开" />
             </StackPanel>
             <StackPanel Name="stkpDetail"
