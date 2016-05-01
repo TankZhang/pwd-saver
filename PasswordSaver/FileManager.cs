@@ -65,7 +65,7 @@ namespace PasswordSaver
         //备份当前数据，将str写到本地存储中
         public async static Task BackupAsync(string str)
         {
-            StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
+            StorageFolder storageFolder = KnownFolders.MusicLibrary;
             StorageFile sfile = await storageFolder.CreateFileAsync("pwsv.pwsv", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(sfile, str);
         }
@@ -73,7 +73,7 @@ namespace PasswordSaver
         //读出备份数据
         public async static Task<string> ReadBackupAsync()
         {
-            StorageFolder storageFolder = KnownFolders.DocumentsLibrary;
+            StorageFolder storageFolder = KnownFolders.MusicLibrary;
             try
             {
                 StorageFile sfile = await storageFolder.GetFileAsync("pwsv.pwsv");

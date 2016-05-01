@@ -37,33 +37,6 @@
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal"/>
-                                    <VisualState x:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListLowBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
                                     <VisualState x:Name="Selected">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
@@ -389,7 +362,7 @@
             <ListBoxItem Content="备份数据" Name="lstbiGoBackup"/>
             <ListBoxItem Name="lstbiBackup" Visibility="Collapsed">
                 <StackPanel>
-                    <TextBlock TextWrapping="Wrap">请务必注意，当您在所有的设备上卸载此软件时，微软不再保存您在云端的数据。因此当您在所有的设备上卸载此软件之前，务必将数据保存到当地，路径为：文档->pwsv.pwsv。此数据中包含您的密码信息，请妥善保管，当您重新安装此软件时，可以通过文档中的pwsv.pwsv文件恢复备份。</TextBlock>
+                    <TextBlock TextWrapping="Wrap">请务必注意，当您在所有的设备上卸载此软件时，微软不再保存您在云端的数据。因此当您在所有的设备上卸载此软件之前，务必将数据保存到当地，路径为：音乐->pwsv.pwsv。此数据中包含您的密码信息，请妥善保管，当您重新安装此软件时，可以通过音乐文件夹中的pwsv.pwsv文件恢复备份。</TextBlock>
                     <StackPanel Orientation="Horizontal">
                         <Button Name="btnStartBackup"
                             Content="开始备份"
