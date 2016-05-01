@@ -45,4 +45,23 @@ namespace PasswordSaver
                 return true;
         }
     }
+
+   public class FontSizeBindingHelper : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            switch ((string)parameter)
+            {
+                case "CalFontSize":
+                    return ((((double)value) * 2) / 3);
+                default:
+                    return 0;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

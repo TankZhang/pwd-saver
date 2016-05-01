@@ -9,31 +9,33 @@
     d:DesignHeight="300"
     d:DesignWidth="650"
     HorizontalAlignment="Stretch"
-    Name="ucDataItem">
-    <Grid Name="grdDataItem" HorizontalAlignment="Stretch">
-        <StackPanel Margin="5,5,5,30" HorizontalAlignment="Stretch">
+    Name="ucDataItem" 
+    >
+    <Grid Name="grdDataItem" Margin="5,5,5,10">
+        <StackPanel HorizontalAlignment="Stretch" Margin="0,0,25,0">
+            
             <TextBlock>网站：</TextBlock>
-            <TextBlock Text="{Binding WebSite}"/>
+            <TextBlock Text="{Binding WebSite}" TextWrapping="Wrap"/>
             <TextBlock>账户：</TextBlock>
-            <TextBlock Text="{Binding Account}"/>
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
-                <Button Name="btnModify" 
-                        Content="修改" Margin="0,0,10,0" 
-                        Click="btnModify_Click"/>
-                <!--Command="{Binding ModifyInCmd}"
-                        CommandParameter="{Binding ElementName=ucDataItem,Path=DataContext}"-->
-                <Button Name="btnDelete"
-                        Content="删除" Margin="0,0,10,0"
-                        Click="btnDelete_Click"/>
-                <Button Name="btnDetail" Click="btnDetail_Click" Content="展开" />
-            </StackPanel>
+            <TextBlock Text="{Binding Account}"  TextWrapping="Wrap"/>
+            <HyperlinkButton Name="hyplDetail" Click="HyperlinkButton_Click" Content="详细" Foreground="Black"/>
             <StackPanel Name="stkpDetail"
                         Visibility="Collapsed">
                 <TextBlock>密码：</TextBlock>
-                <TextBlock Text="{Binding Pwd}"/>
+                <TextBlock Text="{Binding Pwd}" TextWrapping="Wrap"/>
                 <TextBlock>备注：</TextBlock>
-                <TextBlock Text="{Binding Note}"/>
+                <TextBlock Text="{Binding Note}" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Stretch"
+                        FlowDirection="RightToLeft"
+                        Name="stkpControl">
+                    <Button Name="btnDelete"
+                        Content="删除" Margin="5,0,0,0"
+                        Click="btnDelete_Click"/>
+                    <Button Name="btnModify" 
+                        Content="修改" Margin="10,0,0,0" 
+                        Click="btnModify_Click"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>

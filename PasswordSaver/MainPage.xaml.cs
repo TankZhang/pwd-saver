@@ -10,6 +10,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,12 +31,34 @@ namespace PasswordSaver
         public ViewModel VM = new ViewModel();
         public MainPage()
         {
-            this.InitializeComponent() ;
+            this.InitializeComponent();
             this.DataContext = VM;
             SystemNavigationManager m = SystemNavigationManager.GetForCurrentView();
             m.BackRequested += Quit;
+            Window.Current.SizeChanged += Current_SizeChanged;
+            ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 450 };
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 450, Height = 800 });
         }
-        
+
+        private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            double width = e.Size.Width;
+            double height = e.Size.Height;
+            if (width > (height * 9 / 16))
+            {
+                Height = height;
+                Width = height * 9.0 / 16.0;
+            }
+            else
+            {
+                Height = width * 16.0 / 9.0;
+                Width = width;
+            }
+            //ApplicationView.GetForCurrentView().TryResizeView(new Size { Width = width, Height = height });            
+
+
+        }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -50,7 +73,7 @@ namespace PasswordSaver
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             VM.IsBackVisible = false;
-            if(lstiMain.IsSelected)
+            if (lstiMain.IsSelected)
             {
                 VM.UserInputPwd = "";
                 VM.IsCheck = false;
@@ -124,7 +147,19 @@ namespace PasswordSaver
             await FileManager.WriteToRoamingDataAsync(str);
             VM.IsProgressRingVisible = false;
         }
-        
+
+        //private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    double width = this.ActualWidth; double height = this.ActualHeight;
+        //    if (width > height * 9 / 16)
+        //    {
+        //        Width = height * 9 / 16;
+        //    }
+        //    else
+        //    {
+        //        Height = width * 16 / 9;
+        //    }
+        //}
     }
 }
 #region 双击返回代码

@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using PasswordSaver.Models;
+using Windows.UI;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -24,21 +25,6 @@ namespace PasswordSaver
         public UcDataItem()
         {
             this.InitializeComponent();
-        }
-
-        private void btnDetail_Click(object sender, RoutedEventArgs e)
-        {
-            if (stkpDetail.Visibility == Visibility.Visible)
-            {
-                stkpDetail.Visibility = Visibility.Collapsed;
-                btnDetail.Content = "展开";
-            }
-            else
-            {
-                stkpDetail.Visibility = Visibility.Visible;
-                btnDetail.Content = "收起";
-            }
-            //Debug.WriteLine(grdDataItem.ActualWidth);
         }
 
         //修改项目，读到当前所在的父控件，不断向上，找到VM，调用其ModifyIn方法。
@@ -61,6 +47,24 @@ namespace PasswordSaver
             a = VisualTreeHelper.GetParent(a);
             a = VisualTreeHelper.GetParent(a);
             ((ViewModel)((ItemsStackPanel)a).DataContext).DeleteData((RecordItem)this.DataContext);
+        }
+       
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (stkpDetail.Visibility == Visibility.Visible)
+            {
+                stkpDetail.Visibility = Visibility.Collapsed;
+                hyplDetail.Content = "详细";
+                hyplDetail.Foreground = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                stkpDetail.Visibility = Visibility.Visible;
+                hyplDetail.Content = "收起";
+                hyplDetail.Foreground = new SolidColorBrush(Colors.LightBlue);
+            }
+
         }
     }
 }

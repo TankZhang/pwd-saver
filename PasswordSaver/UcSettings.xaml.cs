@@ -25,14 +25,14 @@ namespace PasswordSaver
             this.InitializeComponent();
         }
 
-        private void btnChangePwd_Click(object sender, RoutedEventArgs e)
-        {
-            stkpBackup.Visibility = Visibility.Collapsed;
-            if (stkpChangePwd.Visibility == Visibility.Visible)
-                stkpChangePwd.Visibility = Visibility.Collapsed;
-            else
-                stkpChangePwd.Visibility = Visibility.Visible;
-        }
+        //private void btnChangePwd_Click(object sender, RoutedEventArgs e)
+        //{
+        //    stkpBackup.Visibility = Visibility.Collapsed;
+        //    if (stkpChangePwd.Visibility == Visibility.Visible)
+        //        stkpChangePwd.Visibility = Visibility.Collapsed;
+        //    else
+        //        stkpChangePwd.Visibility = Visibility.Visible;
+        //}
 
         private void btnChangePwdConfirm_Click(object sender, RoutedEventArgs e)
         {
@@ -72,15 +72,15 @@ namespace PasswordSaver
             pwbxNewPwdConfirm.Password = "";
         }
 
-        private void btnBackup_Click(object sender, RoutedEventArgs e)
-        {
-            stkpChangePwd.Visibility = Visibility.Collapsed;
-            if (stkpBackup.Visibility == Visibility.Visible)
-                stkpBackup.Visibility = Visibility.Collapsed;
-            else
-                stkpBackup.Visibility = Visibility.Visible;
+        //private void btnBackup_Click(object sender, RoutedEventArgs e)
+        //{
+        //    stkpChangePwd.Visibility = Visibility.Collapsed;
+        //    if (stkpBackup.Visibility == Visibility.Visible)
+        //        stkpBackup.Visibility = Visibility.Collapsed;
+        //    else
+        //        stkpBackup.Visibility = Visibility.Visible;
 
-        }
+        //}
 
         private void btnRecoverBackup_Click(object sender, RoutedEventArgs e)
         {
@@ -92,6 +92,21 @@ namespace PasswordSaver
         {
             ViewModel vm = (ViewModel)this.DataContext;
             vm.BackupAsync();
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstbiGoChange.IsSelected)
+            {
+                lstbiChangePwd.Visibility = Visibility.Visible;
+                lstbiBackup.Visibility = Visibility.Collapsed;
+            }
+            if(lstbiGoBackup.IsSelected)
+            {
+                lstbiChangePwd.Visibility = Visibility.Collapsed;
+                lstbiBackup.Visibility = Visibility.Visible;
+            }
+            
         }
     }
 }

@@ -93,7 +93,7 @@ namespace PasswordSaver
                     tbxShow.Text = C.ToString();
                     lastButton = str;
                     break;
-                case "CE":
+                case "C":
                     Operator = "";
                     A = 0;
                     B = 0;
@@ -128,5 +128,6 @@ namespace PasswordSaver
         {
            await ((ViewModel)DataContext).CheckPasswordAsync(tbxShow.Text);
         }
+        
     }
 }
