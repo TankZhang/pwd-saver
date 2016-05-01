@@ -35,6 +35,7 @@ namespace PasswordSaver
             SystemNavigationManager m = SystemNavigationManager.GetForCurrentView();
             m.BackRequested += Quit;
         }
+        
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -51,6 +52,7 @@ namespace PasswordSaver
             VM.IsBackVisible = false;
             if(lstiMain.IsSelected)
             {
+                VM.UserInputPwd = "";
                 VM.IsCheck = false;
                 VM.IsUcItemDetailVisible = false;
                 VM.Title = "主页";

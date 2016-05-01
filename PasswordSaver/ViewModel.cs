@@ -23,9 +23,9 @@ namespace PasswordSaver
 
             set
             {
-                _isCheck = value;
                 if (value)
                     IsListVisible = true;
+                _isCheck = value;
                 RaisedPropertyChanged("IsCheck");
             }
         }
@@ -223,6 +223,7 @@ namespace PasswordSaver
                 RaisedPropertyChanged("IsBackVisible");
             }
         }
+       
 
         string _title;
         public string Title
@@ -254,6 +255,20 @@ namespace PasswordSaver
             }
         }
 
+        bool _isLstMainSelected;
+        public bool IsLstMainSelected
+        {
+            get
+            {
+                return _isLstMainSelected;
+            }
+
+            set
+            {
+                _isLstMainSelected = value;
+                RaisedPropertyChanged("IsLstMainSelected");
+            }
+        }
         #endregion
 
         #region 各类命令
@@ -302,15 +317,11 @@ namespace PasswordSaver
         }
 
 
-
-
-
-
         #endregion
 
 
         //校验密码，如果对的就更新当前RecordItems
-        public async Task CheckPasswordAsync(string pwd)
+        public async Task<bool> CheckPasswordAsync(string pwd)
         {
             if (EncryptHelper.PwdEncrypt(pwd) == RightPwdMd5)
             {
@@ -324,6 +335,7 @@ namespace PasswordSaver
             }
             else
                 IsCheck = false;
+            return IsCheck;
         }
 
         //更改数据,找到与记忆条目相同的，更改之，然后返回去

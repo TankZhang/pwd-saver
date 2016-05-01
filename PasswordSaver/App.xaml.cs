@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -31,6 +32,8 @@ namespace PasswordSaver
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
+        
+
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
@@ -39,15 +42,13 @@ namespace PasswordSaver
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            //FileManager.WriteCode("123");
-            //string a = "1";
-//#if DEBUG
-//            if (System.Diagnostics.Debugger.IsAttached)
-//            {
-//                this.DebugSettings.EnableFrameRateCounter = true;
-//            }
-//#endif
-
+            //#if DEBUG
+            //            if (System.Diagnostics.Debugger.IsAttached)
+            //            {
+            //                this.DebugSettings.EnableFrameRateCounter = true;
+            //            }
+            //#endif
+            Debug.WriteLine("OnLaunched");
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -100,7 +101,11 @@ namespace PasswordSaver
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
+            ((MainPage)(((Frame)Window.Current.Content).Content)).VM.IsCheck = false;
+            ((MainPage)(((Frame)Window.Current.Content).Content)).VM.UserInputPwd = "";
+            ((MainPage)(((Frame)Window.Current.Content).Content)).VM.IsLstMainSelected = true;
             deferral.Complete();
         }
+        
     }
 }

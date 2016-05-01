@@ -51,7 +51,8 @@
                 <ListBox SelectionMode="Single"
                          SelectionChanged="ListBox_SelectionChanged">
                     <!--Pane中主页按钮-->
-                    <ListBoxItem Name="lstiMain">
+                    <ListBoxItem Name="lstiMain"
+                                 IsSelected="{Binding IsLstMainSelected,Mode=TwoWay}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets"
                                        Text="&#xe80F;"
