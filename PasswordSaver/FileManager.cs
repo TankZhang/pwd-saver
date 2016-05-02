@@ -12,8 +12,8 @@ namespace PasswordSaver
 {
     public class FileManager
     {
-        public static StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
-        public static ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
+        //public static StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
+        //public static ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
 
         //将对象存到jsonstring中去
         public static string GetJsonString<T>(T obj)
@@ -38,8 +38,9 @@ namespace PasswordSaver
         //将str写入RoamingData存储区中
         public async static Task WriteToRoamingDataAsync(string str)
         {
+            StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
             //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
-            StorageFile savedFile = await RoamingFolder.CreateFileAsync("dataFile", CreationCollisionOption.ReplaceExisting);
+            StorageFile savedFile = await RoamingFolder.CreateFileAsync("dataFile.pwsv", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(savedFile, str);
 
             //测试数据量是否超过100k
@@ -53,7 +54,8 @@ namespace PasswordSaver
         {
             try
             {
-                StorageFile savedFile = await RoamingFolder.GetFileAsync("dataFile");
+                StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
+                StorageFile savedFile = await RoamingFolder.GetFileAsync("dataFile.pwsv");
                 return await FileIO.ReadTextAsync(savedFile);
             }
             catch
@@ -89,18 +91,21 @@ namespace PasswordSaver
         //将密码写入存储区
         public static void WriteCode(string pwd)
         {
-            WriteSetting("Code", EncryptHelper.PwdEncrypt(pwd));
+            ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
+            RoamingSettings.Values["Code"] = EncryptHelper.PwdEncrypt(pwd);
         }
 
         //写入设置
         private static void WriteSetting(string set, string value)
         {
+            ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
             RoamingSettings.Values[set] = value;
         }
 
         //读出密码
         public static string GetCode()
         {
+            ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
             string str = (String)RoamingSettings.Values["Code"];
             if (!String.IsNullOrEmpty(str))
                 return str;
