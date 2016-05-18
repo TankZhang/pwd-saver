@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="RoamingTest.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RoamingTest"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid  Name="grdMain">
+        <ProgressRing Name="prgrsr"
+                      IsActive="False"
+                      Width="200"
+                      Height="200"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Name="stkpMain">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Onedrive登陆" Name="btnLogin" Click="btnLogin_Click"/>
+                    <Button Content="Onedrive下载" Name="btnDown" Click="btnDown_Click"/>
+                    <Button Content="Onedrive上传" Name="btnUpLoad" Click="btnUpLoad_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="本地备份" Name="btnBac" Click="btnBac_Click"/>
+                    <Button Content="本地还原" Name="btnDeBac" Click="btnDeBac_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="存入" Name="btnSave" Click="btnSave_Click"/>
+                    <Button Content="读取" Name="btnRead" Click="btnRead_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Roaming存入" Name="btnRoamingSave" Click="btnRoamingSave_Click"/>
+                    <Button Content="Roaming读取" Name="btnRoamingRead" Click="btnRoamingRead_Click"/>
+                </StackPanel>
+                <TextBox Name="tbx" />
+                <TextBlock Name="tblID" TextWrapping="Wrap" Height="auto" ScrollViewer.VerticalScrollMode="Auto" Width="250"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
