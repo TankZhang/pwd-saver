@@ -460,6 +460,27 @@ namespace PasswordSaver
             IsProgressRingVisible = false;
         }
 
+        //明文导出数据
+        public async void ExportData()
+        {
+            IsProgressRingVisible = true;
+            SettingResult = "开始备份...";
+            string strToSave = "";
+            foreach (RecordItem item in RecordItems)
+            {
+                strToSave += "网站：" + item.WebSite + "\n";
+                strToSave += "账号：" + item.Account + "\n";
+                strToSave += "密码：" + item.Pwd + "\n";
+                strToSave += "备注：" + item.Note + "\n\n";
+            }
+            string strResult = await FileManager.BackupAsync(strToSave, SaveType.LocalFile);
+            if (strResult.StartsWith("-"))
+                SettingResult = strResult.Substring(1);
+            else
+                SettingResult = "备份成功！";
+            IsProgressRingVisible = false;
+        }
+
         //读出备份数据，同时将备份数据写入本地文件
         public async void ReadBackupAsync(SaveType st)
         {
@@ -481,6 +502,9 @@ namespace PasswordSaver
             {
                 SettingResult = "恢复成功！";
                 await SaveRecordAsync(SaveType.LocalState);
+                IsCheck = false;
+                UserInputPwd = "";
+                IsLstMainSelected = true;
             }
             IsProgressRingVisible = false;
         }

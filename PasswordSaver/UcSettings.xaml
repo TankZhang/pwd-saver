@@ -372,10 +372,10 @@
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartOneDriveBackup"
                             Content="开始备份"
-                            Click="btnStartOneDriveBackup_Click"/>
+                            Click="button_Click"/>
                             <Button Name="btnRecoverOneDriveBackup"
                             Content="恢复备份"
-                            Click="btnRecoverOneDriveBackup_Click"/>
+                            Click="button_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </ListBoxItem>
@@ -387,10 +387,10 @@
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartBackup"
                             Content="开始备份"
-                            Click="btnStartBackup_Click"/>
+                            Click="button_Click"/>
                             <Button Name="btnRecoverBackup"
                             Content="恢复备份"
-                            Click="btnRecoverBackup_Click"/>
+                            Click="button_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </ListBoxItem>
@@ -402,12 +402,21 @@
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartRoamingBackup"
                             Content="开始备份"
-                            Click="btnStartRoamingBackup_Click"/>
+                            Click="button_Click"/>
                             <Button Name="btnRecoverRoamingBackup"
                             Content="恢复备份"
-                            Click="btnRecoverRoamingBackup_Click"/>
+                            Click="button_Click"/>
                         </StackPanel>
                     </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Content="明文导出数据" Name="lstbiGoExport" />
+                <ListBoxItem Name="lstbiExport" Visibility="Collapsed">
+                    <Button  Content="导出数据" Name="btnExport" Click="button_Click"/>
+                </ListBoxItem>
+                <ListBoxItem Content="常见问题说明" Name="lstbiGoDoc" />
+                <ListBoxItem Name="lstbiDoc" Visibility="Collapsed">
+                    <TextBlock TextWrapping="Wrap"
+                               Name="txbDoc"/>
                 </ListBoxItem>
             </ListBox>
         </StackPanel>
