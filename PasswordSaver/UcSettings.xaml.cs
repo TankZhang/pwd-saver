@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,35 +26,31 @@ namespace PasswordSaver
             this.InitializeComponent();
         }
 
-        //private void btnChangePwd_Click(object sender, RoutedEventArgs e)
-        //{
-        //    stkpBackup.Visibility = Visibility.Collapsed;
-        //    if (stkpChangePwd.Visibility == Visibility.Visible)
-        //        stkpChangePwd.Visibility = Visibility.Collapsed;
-        //    else
-        //        stkpChangePwd.Visibility = Visibility.Visible;
-        //}
-
         private void btnChangePwdConfirm_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel vm = (ViewModel)this.DataContext;
             if (pwbxNewPwd.Password != pwbxNewPwdConfirm.Password)
             {
-                tbxOldPwd.Text = "错误！新密码不一致";
+                vm.SettingResult = "错误！新密码不一致";
                 return;
             }
             if (string.IsNullOrEmpty(pwbxNewPwd.Password))
             {
-                tbxOldPwd.Text = "错误！新密码不能为空";
+                vm.SettingResult = "错误！新密码不能为空";
                 return;
             }
-            ViewModel vm = (ViewModel)this.DataContext;
+            string regexStr = @"\D";
+            if(Regex.IsMatch(pwbxNewPwd.Password,regexStr))
+            {
+                vm.SettingResult = "错误！新密码只能为数字";
+                return;
+            }
             if (EncryptHelper.PwdEncrypt(tbxOldPwd.Text) != vm.RightPwdMd5)
             {
-                tbxOldPwd.Text = "错误！密码错误";
+                vm.SettingResult = "错误！密码错误";
                 return;
             }
             vm.ChangePwd(pwbxNewPwd.Password);
-            tbxOldPwd.Text = "修改成功！";
 
         }
 
@@ -71,42 +68,76 @@ namespace PasswordSaver
         {
             pwbxNewPwdConfirm.Password = "";
         }
-
-        //private void btnBackup_Click(object sender, RoutedEventArgs e)
-        //{
-        //    stkpChangePwd.Visibility = Visibility.Collapsed;
-        //    if (stkpBackup.Visibility == Visibility.Visible)
-        //        stkpBackup.Visibility = Visibility.Collapsed;
-        //    else
-        //        stkpBackup.Visibility = Visibility.Visible;
-
-        //}
-
+        
         private void btnRecoverBackup_Click(object sender, RoutedEventArgs e)
         {
             ViewModel vm = (ViewModel)this.DataContext;
-            vm.ReadBackupAsync(SaveType.OneDrive);
+            vm.ReadBackupAsync(SaveType.LocalFile);
         }
 
         private void btnStartBackup_Click(object sender, RoutedEventArgs e)
         {
             ViewModel vm = (ViewModel)this.DataContext;
+            vm.BackupAsync(SaveType.LocalFile);
+        }
+        
+        private void btnStartOneDriveBackup_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel vm = (ViewModel)this.DataContext;
             vm.BackupAsync(SaveType.OneDrive);
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void btnRecoverOneDriveBackup_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel vm = (ViewModel)this.DataContext;
+            vm.ReadBackupAsync(SaveType.OneDrive);
+        }
+
+        private void btnStartRoamingBackup_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel vm = (ViewModel)this.DataContext;
+            vm.BackupAsync(SaveType.RoamingData);
+
+        }
+
+        private void btnRecoverRoamingBackup_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel vm = (ViewModel)this.DataContext;
+            vm.ReadBackupAsync(SaveType.RoamingData);
+
+        }
+
+        private void ListBox_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (lstbiGoChange.IsSelected)
             {
-                lstbiChangePwd.Visibility = Visibility.Visible;
-                lstbiBackup.Visibility = Visibility.Collapsed;
+                lstbiChangePwd.Visibility = lstbiChangePwd.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                lstbiOneDriveBackup.Visibility = Visibility.Collapsed;
+                lstbiRoamingBackup.Visibility = Visibility.Collapsed;
+                lstbiLocalBackup.Visibility = Visibility.Collapsed;
             }
-            if(lstbiGoLocalBackup.IsSelected)
+            if (lstbiGoOneDriveBackup.IsSelected)
             {
                 lstbiChangePwd.Visibility = Visibility.Collapsed;
-                lstbiBackup.Visibility = Visibility.Visible;
+                lstbiOneDriveBackup.Visibility = lstbiOneDriveBackup.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                lstbiRoamingBackup.Visibility = Visibility.Collapsed;
+                lstbiLocalBackup.Visibility = Visibility.Collapsed;
             }
-            
+            if (lstbiGoLocalBackup.IsSelected)
+            {
+                lstbiChangePwd.Visibility = Visibility.Collapsed;
+                lstbiOneDriveBackup.Visibility = Visibility.Collapsed;
+                lstbiRoamingBackup.Visibility = Visibility.Collapsed;
+                lstbiLocalBackup.Visibility = lstbiLocalBackup.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
+            if (lstbiGoRoamingBackup.IsSelected)
+            {
+                lstbiChangePwd.Visibility = Visibility.Collapsed;
+                lstbiOneDriveBackup.Visibility = Visibility.Collapsed;
+                lstbiRoamingBackup.Visibility = lstbiRoamingBackup.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                lstbiLocalBackup.Visibility = Visibility.Collapsed;
+            }
+
         }
     }
 }

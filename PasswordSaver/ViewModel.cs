@@ -535,8 +535,8 @@ namespace PasswordSaver
         //初始化函数
         private async void VMInit()
         {
+            IsProgressRingVisible = true;
             IsCheck = false;
-            IsProgressRingVisible = false;
             IsGrdPwdsListVisible = false;
             IsUcItemDetailVisible = false;
             ModifyCmd = new RelayCommand(new Action(ModifyData));
@@ -552,6 +552,7 @@ namespace PasswordSaver
             RecordItemToModify = new RecordItem();
             IsBackVisible = false;
             Title = "主页";
+            IsProgressRingVisible = false;
 
         }
 

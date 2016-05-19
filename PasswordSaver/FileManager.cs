@@ -85,8 +85,9 @@ namespace PasswordSaver
                         break;
                     case SaveType.OneDrive:
                         try { 
-                        string[] scopes = new string[] { "wl.signin", "wl.offline_access", "onedrive.readwrite" };
-                        var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(scopes);
+                        //string[] scopes = new string[] { "wl.signin", "wl.offline_access", "onedrive.readwrite" };
+                            string[] scopes = new string[] { "wl.signin",  "onedrive.readwrite" };
+                            var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(scopes);
                         await oneDriveClient.AuthenticateAsync();
                         byte[] array = Encoding.UTF8.GetBytes(str);
                         MemoryStream stream = new MemoryStream(array);
@@ -141,8 +142,9 @@ namespace PasswordSaver
                         return await FileIO.ReadTextAsync(RoamingDataFile);
                     case SaveType.OneDrive:
                         try { 
-                        string[] scopes = new string[] { "wl.signin", "wl.offline_access", "onedrive.readwrite" };
-                        var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(scopes);
+                        //string[] scopes = new string[] { "wl.signin", "wl.offline_access", "onedrive.readwrite" };
+                            string[] scopes = new string[] { "wl.signin", "onedrive.readwrite" };
+                            var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(scopes);
                         await oneDriveClient.AuthenticateAsync();
                         var item = await oneDriveClient
                                  .Drive
