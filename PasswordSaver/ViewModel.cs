@@ -445,10 +445,11 @@ namespace PasswordSaver
             else { SettingResult = "修改成功！"; }
         }
 
-        //备份函数，将当前的数据用密码“123”保存到本地
+        //备份函数
         public async void BackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
+            SettingResult = "开始备份...";
             string codeStr = CodeRecord();
             string strToSave = RightPwdMd5 + "|" + codeStr;
             string strResult = await FileManager.BackupAsync(strToSave, st);
@@ -463,6 +464,7 @@ namespace PasswordSaver
         public async void ReadBackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
+            SettingResult = "开始恢复...";
             string strRecover = await FileManager.RecoverAsync(st);
             if (strRecover.StartsWith("-"))
             {

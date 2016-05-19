@@ -397,7 +397,7 @@
                 <ListBoxItem Content="Roaming备份" Name="lstbiGoRoamingBackup" />
                 <ListBoxItem Name="lstbiRoamingBackup" Visibility="Collapsed">
                     <StackPanel>
-                        <TextBlock Text="通过在RoamingData创建文件进行备份,同步速度慢，不准确，严重依赖网络环境，不推荐此备份方式"
+                        <TextBlock Text="通过在RoamingData创建文件进行备份,不稳定"
                                    TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartRoamingBackup"
