@@ -338,7 +338,7 @@
                        Foreground="White"
                         />
             <ListBox Background="Transparent" Tapped="ListBox_Tapped">
-                <ListBoxItem Content="修改密码" Name="lstbiGoChange"/>
+                <ListBoxItem Content="修改登陆密码" Name="lstbiGoChange" />
                 <ListBoxItem Name="lstbiChangePwd" Visibility="Collapsed">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">
@@ -379,7 +379,7 @@
                         </StackPanel>
                     </StackPanel>
                 </ListBoxItem>
-                <ListBoxItem Content="本地备份" Name="lstbiGoLocalBackup"/>
+                <ListBoxItem Content="本地文件备份" Name="lstbiGoLocalBackup"/>
                 <ListBoxItem Name="lstbiLocalBackup" Visibility="Collapsed">
                     <StackPanel>
                         <TextBlock Text="通过在本地创建文件进行备份"
@@ -394,7 +394,7 @@
                         </StackPanel>
                     </StackPanel>
                 </ListBoxItem>
-                <ListBoxItem Content="Roaming备份" Name="lstbiGoRoamingBackup"/>
+                <ListBoxItem Content="Roaming备份" Name="lstbiGoRoamingBackup" />
                 <ListBoxItem Name="lstbiRoamingBackup" Visibility="Collapsed">
                     <StackPanel>
                         <TextBlock Text="通过在RoamingData创建文件进行备份,同步速度慢，不准确，严重依赖网络环境，不推荐此备份方式"

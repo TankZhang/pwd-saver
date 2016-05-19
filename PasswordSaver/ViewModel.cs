@@ -467,15 +467,19 @@ namespace PasswordSaver
             if (strRecover.StartsWith("-"))
             {
                 SettingResult = strRecover.Substring(1);
+                IsProgressRingVisible = false;
                 return;
             }
             RightPwdMd5 = strRecover.Substring(0, 32);
             string codeStr = strRecover.Substring(33);
-            string strResult= DecodeRecord(codeStr);
+            string strResult = DecodeRecord(codeStr);
             if (strResult.StartsWith("-"))
                 SettingResult = strResult.Substring(1);
             else
+            {
                 SettingResult = "恢复成功！";
+                await SaveRecordAsync(SaveType.LocalState);
+            }
             IsProgressRingVisible = false;
         }
 
