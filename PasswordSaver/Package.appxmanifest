@@ -23,7 +23,7 @@
       <Extensions>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name=".pwsv">
-            <uap:DisplayName>密码计算器</uap:DisplayName>
+            <uap:DisplayName>密码计算器文件</uap:DisplayName>
             <uap:SupportedFileTypes>
               <uap:FileType>.pwsv</uap:FileType>
             </uap:SupportedFileTypes>

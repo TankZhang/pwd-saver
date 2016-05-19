@@ -223,7 +223,7 @@ namespace PasswordSaver
                 RaisedPropertyChanged("IsBackVisible");
             }
         }
-       
+
 
         string _title;
         public string Title
@@ -240,18 +240,18 @@ namespace PasswordSaver
             }
         }
 
-        string _backupResult;
-        public string BackupResult
+        string _settingResult;
+        public string SettingResult
         {
             get
             {
-                return _backupResult;
+                return _settingResult;
             }
 
             set
             {
-                _backupResult = value;
-                RaisedPropertyChanged("BackupResult");
+                _settingResult = value;
+                RaisedPropertyChanged("SettingResult");
             }
         }
 
@@ -330,7 +330,16 @@ namespace PasswordSaver
                 //如果现有列表中没有数据，即打开应用的第一次验证
                 if (RecordItems.Count < 1)
                 {
-                    await ReadRecordAsync();
+                    IsProgressRingVisible = true;
+                    string str = await FileManager.RecoverAsync(SaveType.LocalState);
+                    if (!str.StartsWith("-"))
+                    {
+                        str = str.Substring(33);
+                        string exStr = DecodeRecord(str);
+                        if (exStr.StartsWith("-"))
+                            Title = exStr.Substring(1);
+                    }
+                    IsProgressRingVisible = false;
                 }
             }
             else
@@ -343,11 +352,14 @@ namespace PasswordSaver
         {
             int index = FindIndexOf(RecordItemMemory.WebSite, RecordItemMemory.Account);
             CopyRecordItem(RecordItemToModify, RecordItems[index]);
-            await SaveRecordAsync();
+            string str = await SaveRecordAsync(SaveType.LocalState);
+            if (str.StartsWith("-"))
+                Title = str.Substring(1);
+            else
+                Title = "收藏列表";
             IsUcItemDetailVisible = false;
             IsGrdPwdsListVisible = true;
             IsBackVisible = false;
-            Title = "收藏列表";
         }
 
         //进入更改数据的设置,RecordItemMemory为记忆条目，RecordItemToModify为被绑定待修改条目
@@ -390,11 +402,14 @@ namespace PasswordSaver
                 RecordItem r = new RecordItem();
                 CopyRecordItem(RecordItemToModify, r);
                 RecordItems.Add(r);
-                await SaveRecordAsync();
+                string titleStr = await SaveRecordAsync(SaveType.LocalState);
+                if (titleStr.StartsWith("-"))
+                    Title = titleStr.Substring(1);
+                else
+                    Title = "收藏列表";
                 IsUcItemDetailVisible = false;
                 IsGrdPwdsListVisible = true;
                 IsBackVisible = false;
-                Title = "收藏列表";
                 IsListVisible = true;
             }
         }
@@ -404,7 +419,7 @@ namespace PasswordSaver
         {
             int index = FindIndexOf(recordItem.WebSite, recordItem.Account);
             RecordItems.RemoveAt(index);
-            await SaveRecordAsync();
+            await SaveRecordAsync(SaveType.LocalState);
         }
 
         //返回函数
@@ -416,47 +431,52 @@ namespace PasswordSaver
             Title = "收藏列表";
         }
 
-        //修改密码，修改当前密码，然后修改后将新密码与新数据重新存入roamingdata
+        //修改密码，修改当前密码，然后将修改后的数据存入本地文件夹
         public async void ChangePwd(string pwd)
         {
-            FileManager.WriteCode(pwd);
+            string pwdMd5 = EncryptHelper.PwdEncrypt(pwd);
             RightPwd = pwd;
-            RightPwdMd5 = FileManager.GetCode();
-            await SaveRecordAsync();
+            RightPwdMd5 = pwdMd5;
+            string codeStr = CodeRecord();
+            string strToSave = pwdMd5 + "|" + codeStr;
+            string result = await FileManager.BackupAsync(strToSave, SaveType.LocalState);
+            if (result.StartsWith("-"))
+                SettingResult = result.Substring(1);
+            else { SettingResult = "修改成功！"; }
         }
 
         //备份函数，将当前的数据用密码“123”保存到本地
-        public async void BackupAsync()
+        public async void BackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
-            string jsonStr = FileManager.GetJsonString<ObservableCollection<RecordItem>>(RecordItems);
-            string encryptStr = EncryptHelper.DESEncrypt("123", jsonStr);
-            await FileManager.BackupAsync(encryptStr);
-            BackupResult = "备份成功！";
+            string codeStr = CodeRecord();
+            string strToSave = RightPwdMd5 + "|" + codeStr;
+            string strResult = await FileManager.BackupAsync(strToSave, st);
+            if (strResult.StartsWith("-"))
+                SettingResult = strResult.Substring(1);
+            else
+                SettingResult = "备份成功！";
             IsProgressRingVisible = false;
         }
 
         //读出备份数据，同时将备份数据写入本地文件
-        public async void ReadBackupAsync()
+        public async void ReadBackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
-            string str = await FileManager.ReadBackupAsync();
-            if (str == "-1")
+            string strRecover = await FileManager.RecoverAsync(st);
+            if (strRecover.StartsWith("-"))
             {
-                IsProgressRingVisible = false;
-                BackupResult = "恢复失败，请检查本地文件！";
+                SettingResult = strRecover.Substring(1);
                 return;
             }
+            RightPwdMd5 = strRecover.Substring(0, 32);
+            string codeStr = strRecover.Substring(33);
+            string strResult= DecodeRecord(codeStr);
+            if (strResult.StartsWith("-"))
+                SettingResult = strResult.Substring(1);
             else
-            {
-                string decryptStr = EncryptHelper.DESDecrypt("123", str);
-                RecordItems.Clear();
-                foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
-                { RecordItems.Add(item); }
-                await SaveRecordAsync();
-                BackupResult = "恢复成功！";
-                IsProgressRingVisible = false;
-            }
+                SettingResult = "恢复成功！";
+            IsProgressRingVisible = false;
         }
 
         //复制条目
@@ -479,39 +499,41 @@ namespace PasswordSaver
             return -1;
         }
 
-        //将当前的RecordItems保存到内存中
-        private async Task SaveRecordAsync()
+        //将当前的数据全部保存
+        private async Task<string> SaveRecordAsync(SaveType st)
         {
             IsProgressRingVisible = true;
-            string jsonStr = FileManager.GetJsonString<ObservableCollection<RecordItem>>(RecordItems);
-            string encryptStr = EncryptHelper.DESEncrypt(RightPwd, jsonStr);
-            await FileManager.WriteToRoamingDataAsync(encryptStr);
+            string codeStr = CodeRecord();
+            string strToSave = RightPwdMd5 + "|" + codeStr;
+            string returnStr = await FileManager.BackupAsync(strToSave, st);
             IsProgressRingVisible = false;
+            return returnStr;
         }
 
-        //将当前内存中的数据读取到RecordItems中
-        private async Task<bool> ReadRecordAsync()
+        //将当前的record生成新的str
+        private string CodeRecord()
         {
-            IsProgressRingVisible = true;
-            string encryptStr = await FileManager.ReadRoamingDataAsync();
-            //能够读出数据
-            if (encryptStr != "-1")
+            string jsonStr = FileManager.GetJsonString<ObservableCollection<RecordItem>>(RecordItems);
+            return EncryptHelper.DESEncrypt(RightPwd, jsonStr);
+        }
+
+        //将当前str读取到RecordItems中
+        private string DecodeRecord(string str)
+        {
+            try
             {
-                string decryptStr = EncryptHelper.DESDecrypt(RightPwd, encryptStr);
+                string decryptStr = EncryptHelper.DESDecrypt(RightPwd, str);
                 RecordItems.Clear();
                 foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
                 { RecordItems.Add(item); }
                 IsProgressRingVisible = false;
-                return true;
+                return "1";
             }
-            else
-            {
-                IsProgressRingVisible = false;
-                return false;
-            }
+            catch (Exception ex) { return "-" + ex.Message; }
         }
-        //构造函数
-        public ViewModel()
+
+        //初始化函数
+        private async void VMInit()
         {
             IsCheck = false;
             IsProgressRingVisible = false;
@@ -520,12 +542,23 @@ namespace PasswordSaver
             ModifyCmd = new RelayCommand(new Action(ModifyData));
             BackCmd = new RelayCommand(new Action(Back));
             AddCmd = new RelayCommand(new Action(AddData));
-            RightPwdMd5 = FileManager.GetCode();
+            string str = await FileManager.RecoverAsync(SaveType.LocalState);
+            if (str.StartsWith("-"))
+            { RightPwdMd5 = EncryptHelper.PwdEncrypt("123"); }
+            else
+            { RightPwdMd5 = FileManager.GetCode(str); }
             RecordItems = new ObservableCollection<RecordItem>();
             RecordItemMemory = new RecordItem();
             RecordItemToModify = new RecordItem();
             IsBackVisible = false;
             Title = "主页";
+
+        }
+
+        //构造函数
+        public ViewModel()
+        {
+            VMInit();
         }
     }
 }

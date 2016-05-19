@@ -332,7 +332,11 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <ListBox SelectionChanged="ListBox_SelectionChanged" Background="Transparent">
+        <StackPanel>
+            <TextBlock Text="{Binding SettingResult}"
+                       TextWrapping="WrapWholeWords"
+                        />
+            <ListBox SelectionChanged="ListBox_SelectionChanged" Background="Transparent">
             <ListBoxItem Content="修改密码" Name="lstbiGoChange"/>
             <ListBoxItem Name="lstbiChangePwd" Visibility="Collapsed">
                 <StackPanel >
@@ -359,11 +363,12 @@
                         />
                 </StackPanel>
             </ListBoxItem>
-            <ListBoxItem Content="备份数据" Name="lstbiGoBackup"/>
-            <ListBoxItem Name="lstbiBackup" Visibility="Collapsed">
-                <StackPanel>
-                    <TextBlock TextWrapping="Wrap">请务必注意，当您在所有的设备上卸载此软件时，微软不再保存您在云端的数据。因此当您在所有的设备上卸载此软件之前，务必将数据保存到当地，路径为：音乐->pwsv.pwsv。此数据中包含您的密码信息，请妥善保管，当您重新安装此软件时，可以通过音乐文件夹中的pwsv.pwsv文件恢复备份。</TextBlock>
-                    <StackPanel Orientation="Horizontal">
+            <ListBoxItem Content="本地备份" Name="lstbiGoLocalBackup"/>
+                <ListBoxItem Name="lstbiBackup" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="通过在本地创建文件进行备份"
+                                   TextWrapping="Wrap"/>
+                        <StackPanel Orientation="Horizontal">
                         <Button Name="btnStartBackup"
                             Content="开始备份"
                             Click="btnStartBackup_Click"/>
@@ -371,10 +376,10 @@
                             Content="恢复备份"
                             Click="btnRecoverBackup_Click"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding BackupResult}"/>
                 </StackPanel>
             </ListBoxItem>
-        </ListBox>
+            </ListBox>
+        </StackPanel>
         <!--<StackPanel Name="stkpMain">
             <Button Name="btnChangePwd"
                     Content="修改密码"

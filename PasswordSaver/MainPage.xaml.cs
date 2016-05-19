@@ -116,37 +116,37 @@ namespace PasswordSaver
             spltvMain.IsPaneOpen = !spltvMain.IsPaneOpen;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            VM.IsCheck = !VM.IsCheck;
-            Debug.WriteLine(VM.UserInputPwd);
-        }
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    VM.IsCheck = !VM.IsCheck;
+        //    Debug.WriteLine(VM.UserInputPwd);
+        //}
 
-        private void btnList_Click(object sender, RoutedEventArgs e)
-        {
-            string timeNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
-            VM.RecordItems.Add(new Models.RecordItem("website-----" + timeNow, "account-----" + timeNow, "pwd-----" + timeNow, "note-----" + timeNow));
-            Debug.WriteLine(VM.RecordItems.Count.ToString());
-            //VM.RecordItems[3].WebSite = "更改之后的！";
-            //string s = "da";
-        }
+        //private void btnList_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string timeNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
+        //    VM.RecordItems.Add(new Models.RecordItem("website-----" + timeNow, "account-----" + timeNow, "pwd-----" + timeNow, "note-----" + timeNow));
+        //    Debug.WriteLine(VM.RecordItems.Count.ToString());
+        //    //VM.RecordItems[3].WebSite = "更改之后的！";
+        //    //string s = "da";
+        //}
 
-        private async void btnChangeCode_Click(object sender, RoutedEventArgs e)
-        {
-            FileManager.WriteCode("321");
-            string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-            str = EncryptHelper.DESEncrypt("321", str);
-            await FileManager.WriteToRoamingDataAsync(str);
-        }
+        //private async void btnChangeCode_Click(object sender, RoutedEventArgs e)
+        //{
+        //    FileManager.WriteCode("321");
+        //    string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
+        //    str = EncryptHelper.DESEncrypt("321", str);
+        //    await FileManager.WriteToRoamingDataAsync(str);
+        //}
 
-        private async void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            VM.IsProgressRingVisible = true;
-            string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-            str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
-            await FileManager.WriteToRoamingDataAsync(str);
-            VM.IsProgressRingVisible = false;
-        }
+        //private async void btnSave_Click(object sender, RoutedEventArgs e)
+        //{
+        //    VM.IsProgressRingVisible = true;
+        //    string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
+        //    str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
+        //    await FileManager.WriteToRoamingDataAsync(str);
+        //    VM.IsProgressRingVisible = false;
+        //}
 
         //private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         //{

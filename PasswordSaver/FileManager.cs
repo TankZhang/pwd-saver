@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.OneDrive.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,14 +8,20 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 
 namespace PasswordSaver
 {
+    public enum SaveType
+    {
+        LocalState,
+        LocalFile,
+        RoamingData,
+        OneDrive
+    }
+
     public class FileManager
     {
-        //public static StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
-        //public static ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
-
         //将对象存到jsonstring中去
         public static string GetJsonString<T>(T obj)
         {
@@ -35,131 +42,131 @@ namespace PasswordSaver
             return obj;
         }
 
-        //将str写入RoamingData存储区中
-        public async static Task WriteToRoamingDataAsync(string str)
+        //通过储存的字符串得到密码的MD5校验
+        public static string GetCode(string str)
         {
-            StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
-            //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
-            StorageFile savedFile = await RoamingFolder.CreateFileAsync("dataFile.pwsv", CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(savedFile, str);
-
-            //测试数据量是否超过100k
-            //StorageFolder storageFolder = KnownFolders.PicturesLibrary;
-            //StorageFile sfile = await storageFolder.CreateFileAsync("a", CreationCollisionOption.ReplaceExisting);
-            //await FileIO.WriteTextAsync(sfile, str);
+            return str.Substring(0, 32);
         }
+             
 
-        //读出RoamingData存储区中的string
-        public async static Task<string> ReadRoamingDataAsync()
+        /// <summary>
+        /// 将str做备份
+        /// </summary>
+        /// <param name="str">需要备份的string</param>
+        /// <param name="st">备份的类型</param>
+        /// <returns>返回成功与否</returns>
+        public async static Task<string> BackupAsync(string str, SaveType st)
         {
             try
             {
-                StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
-                StorageFile savedFile = await RoamingFolder.GetFileAsync("dataFile.pwsv");
-                return await FileIO.ReadTextAsync(savedFile);
+                switch (st)
+                {
+                    case SaveType.LocalState:
+                        StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                        StorageFile LocalStateFile = await localFolder.CreateFileAsync("data.pwsv", CreationCollisionOption.ReplaceExisting);
+                        await FileIO.WriteTextAsync(LocalStateFile, str);
+                        break;
+                    case SaveType.LocalFile:
+                        FileSavePicker picker = new FileSavePicker();
+                        picker.DefaultFileExtension = ".pwsv";
+                        picker.FileTypeChoices.Add("密码计算器文件", new List<string>() { ".pwsv" });
+                        picker.SuggestedFileName = "backup";
+                        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                        StorageFile LocalFileFile = await picker.PickSaveFileAsync();
+                        if (LocalFileFile == null)
+                        { return "-未选择文件！"; }
+                        await FileIO.WriteTextAsync(LocalFileFile, str);
+                        break;
+                    case SaveType.RoamingData:
+                        StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
+                        //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);
+                        StorageFile RoamingDataFile = await RoamingFolder.CreateFileAsync("data.pwsv", CreationCollisionOption.ReplaceExisting);
+                        await FileIO.WriteTextAsync(RoamingDataFile, str);
+                        break;
+                    case SaveType.OneDrive:
+                        try { 
+                        string[] scopes = new string[] { "wl.signin", "wl.offline_access", "onedrive.readwrite" };
+                        var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(scopes);
+                        await oneDriveClient.AuthenticateAsync();
+                        byte[] array = Encoding.UTF8.GetBytes(str);
+                        MemoryStream stream = new MemoryStream(array);
+                        var uploadedItem = await oneDriveClient
+                                                       .Drive
+                                                       .Root
+                                                       .ItemWithPath("Documents/backup.pwsv")
+                                                       .Content
+                                                       .Request()
+                                                       .PutAsync<Item>(stream);
+                        }
+                        catch(Exception exc)
+                        {
+                            return "-" + exc.Message + "\n详细信息：" + exc.InnerException.Message;
+                        }
+                        break;
+                    default: return "-备份时遇到未知参数";
+                }
+                return "1";
             }
-            catch
-            {
-                return "-1";
+            catch (Exception ex)
+            { return "-" + ex.Message; }
+        }
+
+        /// <summary>
+        /// 还原数据
+        /// </summary>
+        /// <param name="st">还原的类型</param>
+        /// <returns>还原回的string，开头为-则失败</returns>
+        public async static Task<string> RecoverAsync(SaveType st)
+        {
+            try {
+                switch(st)
+                {
+                    case SaveType.LocalState:
+                        StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                        StorageFile LocalStateFile = await localFolder.GetFileAsync("data.pwsv");
+                        if(LocalStateFile==null)
+                        { return "-本地不存在此文件"; }
+                        return await FileIO.ReadTextAsync(LocalStateFile);
+                    case SaveType.LocalFile:
+                        FileOpenPicker openFile = new FileOpenPicker();
+                        openFile.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                        openFile.FileTypeFilter.Add(".pwsv");
+                        StorageFile LocalFileFile = await openFile.PickSingleFileAsync();
+                        if (LocalFileFile == null)
+                        { return "-未选择文件"; }
+                        return await FileIO.ReadTextAsync(LocalFileFile);
+                    case SaveType.RoamingData:
+                        StorageFolder RoamingFolder = ApplicationData.Current.RoamingFolder;
+                        StorageFile RoamingDataFile = await RoamingFolder.GetFileAsync("data.pwsv");
+                        return await FileIO.ReadTextAsync(RoamingDataFile);
+                    case SaveType.OneDrive:
+                        try { 
+                        string[] scopes = new string[] { "wl.signin", "wl.offline_access", "onedrive.readwrite" };
+                        var oneDriveClient = OneDriveClientExtensions.GetClientUsingOnlineIdAuthenticator(scopes);
+                        await oneDriveClient.AuthenticateAsync();
+                        var item = await oneDriveClient
+                                 .Drive
+                                 .Root
+                                 .ItemWithPath("Documents/backup.pwsv")
+                                 .Request()
+                                 .GetAsync();
+
+                        using (var contentStream = await oneDriveClient.Drive.Items[item.Id].Content.Request().GetAsync())
+                        {
+                            StreamReader reader = new StreamReader(contentStream);
+                            return reader.ReadToEnd();
+                        }
+                        }
+                        catch(Exception exc)
+                        {
+                            return "-" + exc.Message + "\n详细信息：" + exc.InnerException.Message;
+                        }
+                    default: return "-还原时遇到未知参数";
+                }
             }
-        }
-
-        //备份当前数据，将str写到本地存储中
-        public async static Task BackupAsync(string str)
-        {
-            StorageFolder storageFolder = KnownFolders.MusicLibrary;
-            StorageFile sfile = await storageFolder.CreateFileAsync("pwsv.pwsv", CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(sfile, str);
-        }
-
-        //读出备份数据
-        public async static Task<string> ReadBackupAsync()
-        {
-            StorageFolder storageFolder = KnownFolders.MusicLibrary;
-            try
-            {
-                StorageFile sfile = await storageFolder.GetFileAsync("pwsv.pwsv");
-                string str = await FileIO.ReadTextAsync(sfile);
-                return str;
-            }
-            catch
-            {
-                return "-1";
-            }
-        }
-
-        //将密码写入存储区
-        public static void WriteCode(string pwd)
-        {
-            ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
-            RoamingSettings.Values["Code"] = EncryptHelper.PwdEncrypt(pwd);
-        }
-
-        //写入设置
-        private static void WriteSetting(string set, string value)
-        {
-            ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
-            RoamingSettings.Values[set] = value;
-        }
-
-        //读出密码
-        public static string GetCode()
-        {
-            ApplicationDataContainer RoamingSettings = ApplicationData.Current.RoamingSettings;
-            string str = (String)RoamingSettings.Values["Code"];
-            if (!String.IsNullOrEmpty(str))
-                return str;
-            else
-                return EncryptHelper.PwdEncrypt("123");
+            catch(Exception ex)
+            { return "-" + ex.Message; }
         }
     }
-    /*
-        Windows.Storage.ApplicationDataContainer roamingSettings = 
-            Windows.Storage.ApplicationData.Current.RoamingSettings;
-        Windows.Storage.StorageFolder roamingFolder = 
-            Windows.Storage.ApplicationData.Current.RoamingFolder;
 
-        创建和检索漫游设置
-        使用 ApplicationDataContainer.Values 属性访问我们在前一部分中获取的 roamingSettings 容器中的设置。此示例将创建名为 exampleSetting 的简单设置和名为 composite 的复合值。
-        C#
-
-        // Simple setting
-
-        roamingSettings.Values["exampleSetting"] = "Hello World";
-        // High Priority setting, for example, last page position in book reader app
-        roamingSettings.values["HighPriority"] = "65";
-
-        // Composite setting
-
-        Windows.Storage.ApplicationDataCompositeValue composite = 
-            new Windows.Storage.ApplicationDataCompositeValue();
-        composite["intVal"] = 1;
-        composite["strVal"] = "string";
-
-        roamingSettings.Values["exampleCompositeSetting"] = composite;
-
-
-
-        此示例将检索刚创建的设置。
-        C#
-
-        // Simple setting
-
-        Object value = roamingSettings.Values["exampleSetting"];
-
-        // Composite setting
-
-        Windows.Storage.ApplicationDataCompositeValue composite = 
-           (Windows.Storage.ApplicationDataCompositeValue)roamingSettings.Values["exampleCompositeSetting"];
-
-        if (composite == null)
-        {
-           // No data
-        }
-        else
-        {
-           // Access data in composite["intVal"] and composite["strVal"]
-        }
-
-    */
 }

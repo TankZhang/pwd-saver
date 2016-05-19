@@ -114,7 +114,9 @@ namespace RoamingTest
             picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             StorageFile file = await picker.PickSaveFileAsync();
             text = "fgdashfsdahfjksadjgkhasfiuw的哇大王打算啊打算erfhjksdfhdwadadwadjkdwadasfasdfsdcfsda";
+            if (file != null) { 
             await FileIO.WriteTextAsync(file, text);
+            }
         }
 
         //本地还原
@@ -139,9 +141,17 @@ namespace RoamingTest
         //本地读取
         private async void btnRead_Click(object sender, RoutedEventArgs e)
         {
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile sampleFile = await localFolder.GetFileAsync("data.pwsv");
-            tblID.Text = await FileIO.ReadTextAsync(sampleFile);
+            try
+            {
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                StorageFile sampleFile = await localFolder.GetFileAsync("data.pwsv");
+                tblID.Text = await FileIO.ReadTextAsync(sampleFile);
+            }
+            catch(Exception ex)
+            {
+                tblID.Text = ex.Message;
+            }
+            
         }
 
         //roaming写入

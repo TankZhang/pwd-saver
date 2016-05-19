@@ -85,13 +85,13 @@ namespace PasswordSaver
         private void btnRecoverBackup_Click(object sender, RoutedEventArgs e)
         {
             ViewModel vm = (ViewModel)this.DataContext;
-            vm.ReadBackupAsync();
+            vm.ReadBackupAsync(SaveType.OneDrive);
         }
 
         private void btnStartBackup_Click(object sender, RoutedEventArgs e)
         {
             ViewModel vm = (ViewModel)this.DataContext;
-            vm.BackupAsync();
+            vm.BackupAsync(SaveType.OneDrive);
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -101,7 +101,7 @@ namespace PasswordSaver
                 lstbiChangePwd.Visibility = Visibility.Visible;
                 lstbiBackup.Visibility = Visibility.Collapsed;
             }
-            if(lstbiGoBackup.IsSelected)
+            if(lstbiGoLocalBackup.IsSelected)
             {
                 lstbiChangePwd.Visibility = Visibility.Collapsed;
                 lstbiBackup.Visibility = Visibility.Visible;
