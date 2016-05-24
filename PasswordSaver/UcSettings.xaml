@@ -367,7 +367,7 @@
                 <ListBoxItem Content="OneDrive备份" Name="lstbiGoOneDriveBackup"/>
                 <ListBoxItem Name="lstbiOneDriveBackup" Visibility="Collapsed">
                     <StackPanel>
-                        <TextBlock Text="通过在Onedrive创建文件进行备份,备份路径为Documents/backup.pwsv，推荐此备份方式"
+                        <TextBlock Text="通过在Onedrive创建文件进行备份,备份路径为Documents/backup.pwsv，云端备份，可跨平台，推荐此备份方式。"
                                    TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartOneDriveBackup"
@@ -382,7 +382,7 @@
                 <ListBoxItem Content="本地文件备份" Name="lstbiGoLocalBackup"/>
                 <ListBoxItem Name="lstbiLocalBackup" Visibility="Collapsed">
                     <StackPanel>
-                        <TextBlock Text="通过在本地创建文件进行备份"
+                        <TextBlock Text="通过在本地创建文件进行备份，不可跨平台"
                                    TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartBackup"
@@ -397,7 +397,7 @@
                 <ListBoxItem Content="Roaming备份" Name="lstbiGoRoamingBackup" />
                 <ListBoxItem Name="lstbiRoamingBackup" Visibility="Collapsed">
                     <StackPanel>
-                        <TextBlock Text="通过在RoamingData创建文件进行备份,不稳定"
+                        <TextBlock Text="通过在RoamingData创建文件进行备份,不稳定。每次默认备份，因此不提供备份按钮。原计划通过此机制得到无缝多平台切换，但其效果并没那么好，因此跨平台使用该软件时建议大家手动onedrive备份，当忘记onedrive备份时候可以尝试通过此备份方式恢复备份。"
                                    TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
                             <Button Name="btnStartRoamingBackup"

@@ -39,6 +39,7 @@ namespace PasswordSaver
             ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 450 };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 450, Height = 800 });
+            
         }
 
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
@@ -65,12 +66,20 @@ namespace PasswordSaver
             //Debug.WriteLine(ApplicationData.Current.RoamingStorageQuota);      
         }
 
-        private void Quit(object sender, BackRequestedEventArgs e)
+        private async void Quit(object sender, BackRequestedEventArgs e)
         {
+            try
+            {
+                if (VM.RecordItems.Count > 0)
+                {
+                    await VM.BackupAsync(SaveType.RoamingData);
+                }
+            }
+            catch { }
             App.Current.Exit();
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             VM.IsBackVisible = false;
             if (lstiMain.IsSelected)
@@ -108,6 +117,14 @@ namespace PasswordSaver
             }
             if (lstiQuit.IsSelected)
             {
+                try
+                {
+                    if (VM.RecordItems.Count > 0)
+                    {
+                        await VM.BackupAsync(SaveType.RoamingData);
+                    }
+                }
+                catch { }
                 App.Current.Exit();
             }
         }

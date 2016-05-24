@@ -24,9 +24,12 @@ namespace PasswordSaver
         public UcSettings()
         {
             this.InitializeComponent();
-            txbDoc.Text = "1、为什么OneDrive存储总是等待好长时间后报错？\n    建议检查当前设备能否正常访问OneDrive。\n" +
-                "2、Roaming恢复备份迟迟不同步？\n    Roaming机制有本身的问题，频繁同步或者网络环境稍差都会影响同步成功率和同步速度，并且文件大小限制为100kb（正常使用大约为100组数据），所以用户体验并没预计的好。\n" +
-                "3、恢复备份后密码不能用了？\n    由于备份数据是通过密码加密的，所以恢复备份后请使用备份数据时候的软件登陆密码进行操作。\n";
+            txbDoc.Text = "1、使用指南\n    打开应用为计算器界面，在计算器界面输入进入密码即可进入应用进行使用。\n    请注意备份恢复采用的方式为清空当前数据并恢复备份文件中的数据！！！！\n"
+                +"    请注意备份恢复采用的方式为清空当前数据并恢复备份文件中的数据！！！！\n" +
+                "2、为什么OneDrive存储总是等待好长时间后报错？\n    建议检查当前设备能否正常访问OneDrive。\n" +
+                "3、Roaming恢复备份迟迟不同步？\n    Roaming机制有本身的问题，频繁同步或者网络环境稍差都会影响同步成功率和同步速度，并且文件大小限制为100kb（正常使用大约为100组数据），所以用户体验并没预计的好。\n" +
+                "4、恢复备份后密码不能用了？\n    由于备份数据是通过密码加密的，所以恢复备份后请使用备份数据时候的软件登陆密码进行操作。\n"
+                ;
         }
 
         private void btnChangePwdConfirm_Click(object sender, RoutedEventArgs e)
@@ -73,29 +76,29 @@ namespace PasswordSaver
         }
 
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private async void button_Click(object sender, RoutedEventArgs e)
         {
             ViewModel vm = (ViewModel)this.DataContext;
             Button btn = (Button)sender;
             switch (btn.Name)
             {
                 case "btnRecoverBackup":
-                    vm.ReadBackupAsync(SaveType.LocalFile);
+                   await vm.ReadBackupAsync(SaveType.LocalFile);
                     break;
                 case "btnStartBackup":
-                    vm.BackupAsync(SaveType.LocalFile);
+                   await vm.BackupAsync(SaveType.LocalFile);
                     break;
                 case "btnStartOneDriveBackup":
-                    vm.BackupAsync(SaveType.OneDrive);
+                   await vm.BackupAsync(SaveType.OneDrive);
                     break;
                 case "btnRecoverOneDriveBackup":
-                    vm.ReadBackupAsync(SaveType.OneDrive);
+                   await vm.ReadBackupAsync(SaveType.OneDrive);
                     break;
                 case "btnStartRoamingBackup":
-                    vm.BackupAsync(SaveType.RoamingData);
+                   await vm.BackupAsync(SaveType.RoamingData);
                     break;
                 case "btnRecoverRoamingBackup":
-                    vm.ReadBackupAsync(SaveType.RoamingData);
+                   await vm.ReadBackupAsync(SaveType.RoamingData);
                     break;
                 case "btnExport":
                     vm.ExportData();

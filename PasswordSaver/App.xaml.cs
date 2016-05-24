@@ -33,7 +33,7 @@ namespace PasswordSaver
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-        
+
 
 
         /// <summary>
@@ -97,15 +97,22 @@ namespace PasswordSaver
         /// </summary>
         /// <param name="sender">挂起的请求的源。</param>
         /// <param name="e">有关挂起请求的详细信息。</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
             ((MainPage)(((Frame)Window.Current.Content).Content)).VM.IsCheck = false;
             ((MainPage)(((Frame)Window.Current.Content).Content)).VM.UserInputPwd = "";
             ((MainPage)(((Frame)Window.Current.Content).Content)).VM.IsLstMainSelected = true;
+            try
+            {
+                if (((MainPage)(((Frame)Window.Current.Content).Content)).VM.RecordItems.Count > 0)
+                {
+                   await ((MainPage)(((Frame)Window.Current.Content).Content)).VM.BackupAsync(SaveType.RoamingData);
+                }
+            }
+            catch { }
             deferral.Complete();
         }
-        
     }
 }

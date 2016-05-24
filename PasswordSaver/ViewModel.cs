@@ -315,11 +315,8 @@ namespace PasswordSaver
                 RaisedPropertyChanged("AddCmd");
             }
         }
-
-
         #endregion
-
-
+        
         //校验密码，如果对的就更新当前RecordItems
         public async Task<bool> CheckPasswordAsync(string pwd)
         {
@@ -446,7 +443,7 @@ namespace PasswordSaver
         }
 
         //备份函数
-        public async void BackupAsync(SaveType st)
+        public async Task BackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
             SettingResult = "开始备份...";
@@ -482,7 +479,7 @@ namespace PasswordSaver
         }
 
         //读出备份数据，同时将备份数据写入本地文件
-        public async void ReadBackupAsync(SaveType st)
+        public async Task ReadBackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
             SettingResult = "开始恢复...";
@@ -494,18 +491,24 @@ namespace PasswordSaver
                 return;
             }
             RightPwdMd5 = strRecover.Substring(0, 32);
-            string codeStr = strRecover.Substring(33);
-            string strResult = DecodeRecord(codeStr);
-            if (strResult.StartsWith("-"))
-                SettingResult = strResult.Substring(1);
-            else
-            {
-                SettingResult = "恢复成功！";
-                await SaveRecordAsync(SaveType.LocalState);
-                IsCheck = false;
-                UserInputPwd = "";
-                IsLstMainSelected = true;
-            }
+            await FileManager.BackupAsync(strRecover, SaveType.LocalState);
+            RecordItems.Clear();
+            SettingResult = "恢复成功！";
+            IsCheck = false;
+            UserInputPwd = "";
+            IsLstMainSelected = true;
+            //string codeStr = strRecover.Substring(33);
+            //string strResult = DecodeRecord(codeStr);
+            //if (strResult.StartsWith("-"))
+            //    SettingResult = strResult.Substring(1);
+            //else
+            //{
+            //    await SaveRecordAsync(SaveType.LocalState);
+            //    SettingResult = "恢复成功！";
+            //    IsCheck = false;
+            //    UserInputPwd = "";
+            //    IsLstMainSelected = true;
+            //}
             IsProgressRingVisible = false;
         }
 

@@ -9,5 +9,6 @@
         <local:CollapseBindingHelper x:Key="collapseConverter"/>
         <local:VisibleBindingHelper x:Key="visibleConverter"/>
         <local:FontSizeBindingHelper x:Key="fontsizeConverter"/>
+        <local:StringVisibleBindingHelper x:Key="stringVisibleConverter"/>
     </Application.Resources>
 </Application>

@@ -21,10 +21,16 @@
             <HyperlinkButton Name="hyplDetail" Click="HyperlinkButton_Click" Content="详细" Foreground="Black"/>
             <StackPanel Name="stkpDetail"
                         Visibility="Collapsed">
-                <TextBlock>密码：</TextBlock>
-                <TextBlock Text="{Binding Pwd}" TextWrapping="Wrap"/>
-                <TextBlock>备注：</TextBlock>
-                <TextBlock Text="{Binding Note}" TextWrapping="Wrap"/>
+                <TextBlock Text="密码：" 
+                           Visibility="{Binding Pwd,Converter={StaticResource stringVisibleConverter}}"/>
+                <TextBlock Text="{Binding Pwd}" 
+                           TextWrapping="Wrap" 
+                           Visibility="{Binding Pwd,Converter={StaticResource stringVisibleConverter}}"/>
+                <TextBlock Text="备注：" 
+                           Visibility="{Binding Note,Converter={StaticResource stringVisibleConverter}}"/>
+                <TextBlock Text="{Binding Note}" 
+                           TextWrapping="Wrap" 
+                           Visibility="{Binding Note,Converter={StaticResource stringVisibleConverter}}"/>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Stretch"
                         FlowDirection="RightToLeft"
