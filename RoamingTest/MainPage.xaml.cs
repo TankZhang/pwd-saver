@@ -1,6 +1,7 @@
 ﻿using Microsoft.OneDrive.Sdk;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -27,9 +28,13 @@ namespace RoamingTest
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        public ViewModel VM = new ViewModel();
+
         public MainPage()
         {
             this.InitializeComponent();
+            this.DataContext = VM;
             grdMain.Background = blueBrush;
             
         }
@@ -40,6 +45,8 @@ namespace RoamingTest
         private IOneDriveClient oneDriveClient;
         private string text;
 
+        //备份测试 2016年5月24日20:40:17
+        /*
         //登陆
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
@@ -170,5 +177,183 @@ namespace RoamingTest
             StorageFile savedFile = await RoamingFolder.GetFileAsync("data.pwsv");
             tblID.Text= await FileIO.ReadTextAsync(savedFile);
         }
+        */
+
+
+        //SemanticZoom测试 2016年5月24日20:40:34
+
+        /// <summary> 
+        /// 得到一个汉字的拼音第一个字母，如果是一个英文字母则直接返回大写字母 http://www.cnblogs.com/glacierh/archive/2008/08/25/1276113.html
+        /// </summary> 
+        /// <param name="cnChar">单个汉字</param> 
+        /// <returns>单个大写字母</returns> 
+        private static string GetCharSpellCode(string cnChar)
+        {
+            long iCnChar;
+            
+            byte[] ZW = System.Text.Encoding.Unicode.GetBytes(cnChar);
+
+
+            //声明字符集   
+            System.Text.Encoding utf8, gb2312;
+            //gb2312   
+            gb2312 = System.Text.Encoding.GetEncoding("gb2312");
+            //utf8   
+            utf8 = System.Text.Encoding.GetEncoding("utf-8");
+            byte[] gb;
+            ZW = gb2312.GetBytes(cnChar);
+            //gb = System.Text.Encoding.Convert(gb2312, utf8, gb);
+            ////返回转换后的字符   
+            //return utf8.GetString(gb);
+
+
+
+            //如果是字母，则直接返回 
+            if (ZW.Length == 1)
+            {
+                return cnChar.ToUpper();
+            }
+            else
+            {
+                // get the array of byte from the single char 
+                int i1 = (short)(ZW[0]);
+                int i2 = (short)(ZW[1]);
+                iCnChar = i1 * 256 + i2;
+            }
+
+            //expresstion 
+            //table of the constant list 
+            // 'A'; //45217..45252 
+            // 'B'; //45253..45760 
+            // 'C'; //45761..46317 
+            // 'D'; //46318..46825 
+            // 'E'; //46826..47009 
+            // 'F'; //47010..47296 
+            // 'G'; //47297..47613 
+
+            // 'H'; //47614..48118 
+            // 'J'; //48119..49061 
+            // 'K'; //49062..49323 
+            // 'L'; //49324..49895 
+            // 'M'; //49896..50370 
+            // 'N'; //50371..50613 
+            // 'O'; //50614..50621 
+            // 'P'; //50622..50905 
+            // 'Q'; //50906..51386 
+
+            // 'R'; //51387..51445 
+            // 'S'; //51446..52217 
+            // 'T'; //52218..52697 
+            //没有U,V 
+            // 'W'; //52698..52979 
+            // 'X'; //52980..53640 
+            // 'Y'; //53689..54480 
+            // 'Z'; //54481..55289 
+
+            // iCnChar match the constant 
+            if ((iCnChar >= 45217) && (iCnChar <= 45252))
+            {
+                return "A";
+            }
+            else if ((iCnChar >= 45253) && (iCnChar <= 45760))
+            {
+                return "B";
+            }
+            else if ((iCnChar >= 45761) && (iCnChar <= 46317))
+            {
+                return "C";
+            }
+            else if ((iCnChar >= 46318) && (iCnChar <= 46825))
+            {
+                return "D";
+            }
+            else if ((iCnChar >= 46826) && (iCnChar <= 47009))
+            {
+                return "E";
+            }
+            else if ((iCnChar >= 47010) && (iCnChar <= 47296))
+            {
+                return "F";
+            }
+            else if ((iCnChar >= 47297) && (iCnChar <= 47613))
+            {
+                return "G";
+            }
+            else if ((iCnChar >= 47614) && (iCnChar <= 48118))
+            {
+                return "H";
+            }
+            else if ((iCnChar >= 48119) && (iCnChar <= 49061))
+            {
+                return "J";
+            }
+            else if ((iCnChar >= 49062) && (iCnChar <= 49323))
+            {
+                return "K";
+            }
+            else if ((iCnChar >= 49324) && (iCnChar <= 49895))
+            {
+                return "L";
+            }
+            else if ((iCnChar >= 49896) && (iCnChar <= 50370))
+            {
+                return "M";
+            }
+
+            else if ((iCnChar >= 50371) && (iCnChar <= 50613))
+            {
+                return "N";
+            }
+            else if ((iCnChar >= 50614) && (iCnChar <= 50621))
+            {
+                return "O";
+            }
+            else if ((iCnChar >= 50622) && (iCnChar <= 50905))
+            {
+                return "P";
+            }
+            else if ((iCnChar >= 50906) && (iCnChar <= 51386))
+            {
+                return "Q";
+            }
+            else if ((iCnChar >= 51387) && (iCnChar <= 51445))
+            {
+                return "R";
+            }
+            else if ((iCnChar >= 51446) && (iCnChar <= 52217))
+            {
+                return "S";
+            }
+            else if ((iCnChar >= 52218) && (iCnChar <= 52697))
+            {
+                return "T";
+            }
+            else if ((iCnChar >= 52698) && (iCnChar <= 52979))
+            {
+                return "W";
+            }
+            else if ((iCnChar >= 52980) && (iCnChar <= 53640))
+            {
+                return "X";
+            }
+            else if ((iCnChar >= 53689) && (iCnChar <= 54480))
+            {
+                return "Y";
+            }
+            else if ((iCnChar >= 54481) && (iCnChar <= 55289))
+            {
+                return "Z";
+            }
+            else return ("?");
+        }
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string str = tbxInput.Text;
+            str = ChineseHelper.GetFirstWord(str);
+            tbxOutput.Text = str;
+        }
     }
+
 }

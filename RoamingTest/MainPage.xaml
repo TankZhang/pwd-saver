@@ -14,7 +14,8 @@
                       Height="200"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Name="stkpMain">
-                <StackPanel Orientation="Horizontal">
+                <!--备份测试 2016年5月24日20:40:13-->
+                <!--<StackPanel Orientation="Horizontal">
                     <Button Content="Onedrive登陆" Name="btnLogin" Click="btnLogin_Click"/>
                     <Button Content="Onedrive下载" Name="btnDown" Click="btnDown_Click"/>
                     <Button Content="Onedrive上传" Name="btnUpLoad" Click="btnUpLoad_Click"/>
@@ -32,7 +33,82 @@
                     <Button Content="Roaming读取" Name="btnRoamingRead" Click="btnRoamingRead_Click"/>
                 </StackPanel>
                 <TextBox Name="tbx" />
-                <TextBlock Name="tblID" TextWrapping="Wrap" Height="auto" ScrollViewer.VerticalScrollMode="Auto" Width="250"/>
+                <TextBlock Name="tblID" TextWrapping="Wrap" Height="auto" ScrollViewer.VerticalScrollMode="Auto" Width="250"/>-->
+
+                <!--SemanticZoom测试 2016年5月24日20:40:39-->
+                <TextBox Name="tbxInput" />
+                <Button Content="读出首字母" Click="Button_Click"/>
+                <TextBox Name="tbxOutput" />
+
+                <SemanticZoom>
+                    <SemanticZoom.Style>
+                        <Style TargetType="SemanticZoom">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </SemanticZoom.Style>
+                    <SemanticZoom.ZoomedInView>
+                        <ListView ItemsSource="{Binding  VM.Records}">
+                            <ListView.ItemTemplate>
+                                <!--<DataTemplate x:DataType="local:RecordItem">
+                                    <local:UcDataItem x:Name="ucDataItem" />
+                                </DataTemplate>-->
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding WebSite}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <!--什么意思，待议-->
+                            <ListView.GroupStyle>
+                                <GroupStyle HidesIfEmpty="True" >
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key}" FontSize="25" Foreground="Red"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                    <!--排序列表-->
+                    <SemanticZoom.ZoomedOutView>
+                        <GridView ItemsSource="{Binding  VM.Records}">
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid MaximumRowsOrColumns="4" VerticalAlignment="Top" Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="Red">
+                                        <TextBlock Text="{Binding Group.Key}" HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center"
+                                                   Foreground="Black"/>
+                                    </Border>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer ScrollViewer.VerticalScrollMode="Enabled">
+                                        <Viewbox Stretch="Uniform" Margin="8"  VerticalAlignment="Top" 
+                                             ScrollViewer.VerticalScrollMode="Enabled" StretchDirection="Both" >
+                                            <ItemsPresenter  />
+                                        </Viewbox>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </GridView.Template>
+                        </GridView>
+                    </SemanticZoom.ZoomedOutView>
+                </SemanticZoom>
             </StackPanel>
         </ScrollViewer>
     </Grid>
