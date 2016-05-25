@@ -25,6 +25,7 @@
                 <Button Content="添加" Click="Button_Click"/>
                 <Button Content="删除" Click="Button_Click"/>
                 <SemanticZoom>
+                    
                     <!--数据列表-->
                     <SemanticZoom.ZoomedInView>
                         <ListView ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
