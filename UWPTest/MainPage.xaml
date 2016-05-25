@@ -9,6 +9,11 @@
     <Page.DataContext>
         <local:TViewModel x:Name="TVM"/>
     </Page.DataContext>
+    <Page.Resources>
+        <JumpListItemBackgroundConverter x:Key="BackgroundConverter" Enabled="Red"
+                                         Disabled="Transparent"/>
+        <JumpListItemBackgroundConverter x:Key="ForegroundConverter" Enabled="White" Disabled="Black"/>
+    </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer>
             <StackPanel>
@@ -46,15 +51,38 @@
                     <!--排序列表-->
                     <SemanticZoom.ZoomedOutView>
                         <GridView ItemsSource="{Binding Source={StaticResource CollectionViewSource},Path=CollectionGroups}">
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid MaximumRowsOrColumns="6" VerticalAlignment="Top" Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
                             <GridView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="Red">
+                                    <Border Background="{Binding Converter={StaticResource BackgroundConverter}}">
                                         <TextBlock Text="{Binding Group.Key}" HorizontalAlignment="Center" 
                                                    VerticalAlignment="Center"
-                                                   Foreground="Black"/>
+                                                   Foreground="{Binding Converter={StaticResource ForegroundConverter}}"/>
                                     </Border>
                                 </DataTemplate>
                             </GridView.ItemTemplate>
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer ScrollViewer.VerticalScrollMode="Enabled">
+                                        <Viewbox Stretch="Uniform" Margin="8"  VerticalAlignment="Top" 
+                                             ScrollViewer.VerticalScrollMode="Enabled" StretchDirection="Both" >
+                                            <ItemsPresenter  />
+                                        </Viewbox>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </GridView.Template>
                         </GridView>
                     </SemanticZoom.ZoomedOutView>
                 </SemanticZoom>

@@ -35,10 +35,10 @@ namespace PasswordSaver
             this.DataContext = VM;
             SystemNavigationManager m = SystemNavigationManager.GetForCurrentView();
             m.BackRequested += Quit;
-            Window.Current.SizeChanged += Current_SizeChanged;
-            ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 450 };
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 450, Height = 800 });
+            //Window.Current.SizeChanged += Current_SizeChanged;
+            //ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 450 };
+            //ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 450, Height = 800 });
             
         }
 

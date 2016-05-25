@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ namespace UWPTest
     /// </summary>
     /// <typeparam name="T"></typeparam>
 
-    public class AlphaKeyGroup<T> : List<T>
+    public class AlphaKeyGroup<T> : List<T>, INotifyPropertyChanged
     {
         /// <summary>
         /// 用来获取Key的委托
@@ -21,19 +23,56 @@ namespace UWPTest
         /// <returns></returns>
         public delegate string GetKeyDelegate(T item);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Key { get; private set; }
+        string _key;
+        public string Key
+        {
+            get
+            {
+                return _key;
+            }
+
+            set
+            {
+                _key = value;
+                RaisedPropertyChanged("Key");
+            }
+        }
+        //public string Key { get; private set; }
+
+        ObservableCollection<T> _internalList;
+        public ObservableCollection<T> InternalList
+        {
+            get
+            {
+                return _internalList;
+            }
+
+            set
+            {
+                _internalList = value;
+                RaisedPropertyChanged("InternalList");
+
+            }
+        }
+
 
         const string GlobeGroupKey = "??";
 
-        public List<T> InternalList { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisedPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        //public List<T> InternalList { get; private set; }
+
 
         public AlphaKeyGroup(string key)
         {
             this.Key = key;
-            InternalList = new List<T>();
+            InternalList =new ObservableCollection<T>();
         }
 
         private static List<AlphaKeyGroup<T>> CreateDefaultGroups(CharacterGroupings slg)
@@ -84,7 +123,8 @@ namespace UWPTest
             {
                 foreach (AlphaKeyGroup<T> group in list)
                 {
-                    group.InternalList.Sort((c0, c1) => { return keySelector(c0).CompareTo(keySelector(c1)); });
+                    //group.InternalList.Sort((c0, c1) => { return keySelector(c0).CompareTo(keySelector(c1)); });
+                    //group.InternalList = group.InternalList.OrderBy(r => {  return r.WebSite; });
                 }
             }
 

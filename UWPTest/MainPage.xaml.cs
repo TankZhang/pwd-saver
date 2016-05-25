@@ -25,7 +25,6 @@ namespace UWPTest
         public MainPage()
         {
             this.InitializeComponent();
-            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -40,8 +39,8 @@ namespace UWPTest
             {
                 foreach (var item in TVM.Records)
                 {
-                    if(item.Count>0)
-                    { item.RemoveAt(item.Count - 1);break; }
+                    if(item.InternalList.Count>0)
+                    { item.InternalList.RemoveAt(0);break; }
                 }
             }
         }
