@@ -42,7 +42,6 @@ namespace UWPTest
             }
         }
 
-
         string _pwd;
         [DataMember]
         public string Pwd
