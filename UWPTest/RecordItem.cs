@@ -5,10 +5,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoamingTest
+namespace UWPTest
 {
     [DataContract]
-    public class RecordItem : NotificationObject
+    public class RecordItem:NotificationObject
     {
         string _webSite;
         [DataMember]
@@ -58,13 +58,28 @@ namespace RoamingTest
             }
         }
 
+        string _note;
+        [DataMember]
+        public string Note
+        {
+            get
+            {
+                return _note;
+            }
 
+            set
+            {
+                _note = value;
+                RaisedPropertyChanged("Note");
+            }
+        }
 
-        public RecordItem(string website, string accout, string pwd)
+        public RecordItem(string website, string accout, string pwd, string note)
         {
             WebSite = website;
             Account = accout;
             Pwd = pwd;
+            Note = note;
         }
         public RecordItem()
         {

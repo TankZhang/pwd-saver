@@ -1,0 +1,64 @@
+﻿<Page
+    x:Class="UWPTest.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPTest"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <local:TViewModel x:Name="TVM"/>
+    </Page.DataContext>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ScrollViewer>
+            <StackPanel>
+                <StackPanel.Resources>
+                    <CollectionViewSource x:Key="CollectionViewSource" IsSourceGrouped="True"
+                                          ItemsPath="InternalList"
+                                          Source="{Binding Records}"/>
+                </StackPanel.Resources>
+                <Button Content="添加" Click="Button_Click"/>
+                <Button Content="删除" Click="Button_Click"/>
+                <SemanticZoom>
+                    <!--数据列表-->
+                    <SemanticZoom.ZoomedInView>
+                        <ListView ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding WebSite}"/>
+                                        <TextBlock Text="{Binding Account}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <!--列表头-->
+                            <ListView.GroupStyle>
+                                <GroupStyle HidesIfEmpty="True">
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key}"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                    <!--排序列表-->
+                    <SemanticZoom.ZoomedOutView>
+                        <GridView ItemsSource="{Binding Source={StaticResource CollectionViewSource},Path=CollectionGroups}">
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="Red">
+                                        <TextBlock Text="{Binding Group.Key}" HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center"
+                                                   Foreground="Black"/>
+                                    </Border>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </SemanticZoom.ZoomedOutView>
+                </SemanticZoom>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

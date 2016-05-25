@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="RoamingTest.App"
+    x:Class="UWPTest.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RoamingTest"
+    xmlns:local="using:UWPTest"
     RequestedTheme="Light">
 
 </Application>

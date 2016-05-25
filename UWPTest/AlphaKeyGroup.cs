@@ -5,62 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Globalization.Collation;
 
-namespace RoamingTest
+namespace UWPTest
 {
-    /*
-    public class AlphaKeyGroup<T> : List<T>
-    {
-        const string GlobeGroupKey = "?";
+    /// <summary>
+    /// 用于实现按首字母分组
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
 
-        public string Key { get; private set; }
-
-        public AlphaKeyGroup(string key)
-        {
-            Key = key;
-        }
-
-        private static List<AlphaKeyGroup<T>> CreateDefaultGroups(CharacterGroupings slg)
-        {
-            return (from cg
-                     in slg
-                    where cg.Label != string.Empty
-                    select cg.Label == "..." ?
-                        new AlphaKeyGroup<T>(GlobeGroupKey) :
-                        new AlphaKeyGroup<T>(cg.Label))
-                     .ToList();
-        }
-
-        private static List<AlphaKeyGroup<T>> CreateAZGroups()
-        {
-            char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-            var list = alpha.Select(c => new AlphaKeyGroup<T>(c.ToString())).ToList();
-            return list;
-        }
-
-        public static List<AlphaKeyGroup<T>> CreateGroups(IEnumerable<T> items, Func<T, string> keySelector, bool sort)
-        {
-            CharacterGroupings slg = new CharacterGroupings();
-            List<AlphaKeyGroup<T>> list = CreateAZGroups(); //CreateDefaultGroups(slg);
-            foreach (T item in items)
-            {
-                int index = 0;
-                //string label = GetCharSpellCode(keySelector(item)); //slg.Lookup(keySelector(item));
-                string label = ChineseHelper.GetFirstWord(keySelector(item));
-                index = list.FindIndex(alphagroupkey => (alphagroupkey.Key.Equals(label, StringComparison.CurrentCulture)));
-                if (index > -1 && index < list.Count) list[index].Add(item);
-            }
-            if (sort)
-            {
-                foreach (AlphaKeyGroup<T> group in list)
-                {
-                    group.Sort((c0, c1) => keySelector(c0).CompareTo(keySelector(c1)));
-                }
-            }
-            return list;
-        }
-        
-    }
-    */
     public class AlphaKeyGroup<T> : List<T>
     {
         /// <summary>
@@ -140,4 +91,5 @@ namespace RoamingTest
             return list;
         }
     }
+
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="55214.UWP" Publisher="CN=2D539A84-3C75-4006-BCF3-8CA83856BCF0" Version="1.1.1.0" />
-  <mp:PhoneIdentity PhoneProductId="21371d70-a1f9-4e5d-95cc-458c3466c155" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="17e357a4-e004-4c44-85be-010d8bb6c1cc" Publisher="CN=hhtpe" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="17e357a4-e004-4c44-85be-010d8bb6c1cc" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>UWP测试工具箱</DisplayName>
     <PublisherDisplayName>我的小兵兵</PublisherDisplayName>
@@ -14,8 +14,8 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="RoamingTest.App">
-      <uap:VisualElements DisplayName="UWP测试工具箱" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="测试WindowsStore的连接可用性以及速度" BackgroundColor="transparent">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="UWPTest.App">
+      <uap:VisualElements DisplayName="UWPTest" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="UWP的测试程序" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

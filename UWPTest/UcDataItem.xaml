@@ -1,34 +1,43 @@
 ﻿<UserControl
-    x:Class="RoamingTest.UcDataItem"
+    x:Class="UWPTest.UcDataItem"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RoamingTest"
+    xmlns:local="using:PasswordSaver"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
-
-
+    d:DesignWidth="650"
+    HorizontalAlignment="Stretch"
+    Name="ucDataItem" 
+    >
     <Grid Name="grdDataItem" Margin="5,5,5,10">
         <StackPanel HorizontalAlignment="Stretch" Margin="0,0,25,0">
-
+            
             <TextBlock>网站：</TextBlock>
             <TextBlock Text="{Binding WebSite}" TextWrapping="Wrap"/>
             <TextBlock>账户：</TextBlock>
             <TextBlock Text="{Binding Account}"  TextWrapping="Wrap"/>
-            <Button Content="详细" Name="btnDetail" Click="btnDetail_Click"/>
+            <HyperlinkButton Name="hyplDetail" Click="HyperlinkButton_Click" Content="详细" Foreground="Black"/>
             <StackPanel Name="stkpDetail"
                         Visibility="Collapsed">
                 <TextBlock Text="密码：" 
-                           />
+                           Visibility="{Binding Pwd,Converter={StaticResource stringVisibleConverter}}"/>
                 <TextBlock Text="{Binding Pwd}" 
                            TextWrapping="Wrap" 
-                           />
+                           Visibility="{Binding Pwd,Converter={StaticResource stringVisibleConverter}}"/>
+                <TextBlock Text="备注：" 
+                           Visibility="{Binding Note,Converter={StaticResource stringVisibleConverter}}"/>
+                <TextBlock Text="{Binding Note}" 
+                           TextWrapping="Wrap" 
+                           Visibility="{Binding Note,Converter={StaticResource stringVisibleConverter}}"/>
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Stretch"
                         FlowDirection="RightToLeft"
                         Name="stkpControl">
+                    <Button Name="btnDelete"
+                        Content="删除" Margin="5,0,0,0"
+                        Click="btnDelete_Click"/>
                     <Button Name="btnModify" 
                         Content="修改" Margin="10,0,0,0" 
                         Click="btnModify_Click"/>

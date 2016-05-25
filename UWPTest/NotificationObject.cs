@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoamingTest
+namespace UWPTest
 {
 
     [DataContract]
@@ -15,11 +15,10 @@ namespace RoamingTest
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisedPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
+            if(PropertyChanged!=null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
 }
-

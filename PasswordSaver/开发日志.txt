@@ -39,6 +39,8 @@
 修改UcDataItem使得不存在的数据就不显示。
 2016年5月24日22:39:15
 test中常识使用SemanticZoom，暂时没成功
+2016年5月25日09:53:21
+test中使用SemanticZoom并调试成功，后面对其调整后加入到passwordsaver中。
 
 
 
