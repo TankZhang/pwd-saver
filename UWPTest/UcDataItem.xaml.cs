@@ -29,12 +29,14 @@ namespace UWPTest
         //修改项目，读到当前所在的父控件，不断向上，找到VM，调用其ModifyIn方法。
         private void btnModify_Click(object sender, RoutedEventArgs e)
         {
+
             ////Debug.WriteLine(this.DataContext);
-            //var a = VisualTreeHelper.GetParent(this);
-            //a = VisualTreeHelper.GetParent(a);
-            //a = VisualTreeHelper.GetParent(a);
-            ////a = VisualTreeHelper.GetParent(a);
-            ////a = VisualTreeHelper.GetParent(a);
+            var a = VisualTreeHelper.GetParent(this);
+            a = VisualTreeHelper.GetParent(a);
+            a = VisualTreeHelper.GetParent(a);
+            Debug.WriteLine(((ItemsStackPanel)a).DataContext);
+            ((TViewModel)((ItemsStackPanel)a).DataContext).GoToModify((RecordItem)this.DataContext);
+
             ////Debug.WriteLine(a);
             ////Debug.WriteLine(((ItemsStackPanel)a).DataContext);
             //((TViewModel)((ItemsStackPanel)a).DataContext).GoToModify((RecordItem)this.DataContext);

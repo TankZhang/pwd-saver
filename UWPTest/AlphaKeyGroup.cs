@@ -95,16 +95,25 @@ namespace UWPTest
             return list;
         }
 
+        private static List<AlphaKeyGroup<T>> CreateAZGroups()
+        {
+            char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            var list = alpha.Select(c => new AlphaKeyGroup<T>(c.ToString())).ToList();
+            return list;
+        }
+
         public static List<AlphaKeyGroup<T>> CreateGroups(IEnumerable<T> items, Func<T, string> keySelector, bool sort)
         {
             CharacterGroupings slg = new CharacterGroupings();
-            List<AlphaKeyGroup<T>> list = CreateDefaultGroups(slg);
+            //List<AlphaKeyGroup<T>> list = CreateDefaultGroups(slg);
+            List<AlphaKeyGroup<T>> list = CreateAZGroups();
 
             foreach (T item in items)
             {
                 int index = 0;
                 {
-                    string label = slg.Lookup(keySelector(item));
+                    string label = ChineseHelper.GetFirstWord(keySelector(item));
+                    //string label = slg.Lookup(keySelector(item));
                     index = list.FindIndex(alphaKeyGroup => (alphaKeyGroup.Key.Equals(label, StringComparison.CurrentCulture)));
                 }
 

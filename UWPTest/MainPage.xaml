@@ -22,19 +22,24 @@
                                           ItemsPath="InternalList"
                                           Source="{Binding Records}"/>
                 </StackPanel.Resources>
+                <TextBox Name="tbxIn" />
+                <Button Content="得到" Click="Button_Click"/>
+                <TextBox Name="tbxOut"/>
                 <Button Content="添加" Click="Button_Click"/>
-                <Button Content="删除" Click="Button_Click"/>
-                <SemanticZoom>
-                    
+            <Button Content="删除" Click="Button_Click"/>
+        <SemanticZoom>
                     <!--数据列表-->
                     <SemanticZoom.ZoomedInView>
                         <ListView ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
                             <ListView.ItemTemplate>
-                                <DataTemplate >
+                                <!--<DataTemplate >
                                     <StackPanel>
                                         <TextBlock Text="{Binding WebSite}"/>
                                         <TextBlock Text="{Binding Account}"/>
                                     </StackPanel>
+                                </DataTemplate>-->
+                                <DataTemplate x:DataType="local:RecordItem">
+                                    <local:UcDataItem />
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <!--列表头-->
@@ -86,8 +91,8 @@
                             </GridView.Template>
                         </GridView>
                     </SemanticZoom.ZoomedOutView>
-                </SemanticZoom>
-            </StackPanel>
+            </SemanticZoom>
+        </StackPanel>
         </ScrollViewer>
     </Grid>
 </Page>

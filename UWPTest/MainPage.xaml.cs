@@ -30,19 +30,27 @@ namespace UWPTest
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            if((string)btn.Content=="添加")
+            string str = (string)btn.Content;
+            switch(str)
             {
-                //TVM.Records[2].Add(new RecordItem("这", "倒萨", "大", "打算"));
-                TVM.LoadData1();
-            }
-            else
-            {
-                foreach (var item in TVM.Records)
-                {
-                    if(item.InternalList.Count>0)
-                    { item.InternalList.RemoveAt(0);break; }
-                }
+                case "添加":
+                    //TVM.Records[2].Add(new RecordItem("这", "倒萨", "大", "打算"));
+                    TVM.LoadData1();
+                    break;
+                case "删除":
+                    foreach (var item in TVM.Records)
+                    {
+                        if (item.InternalList.Count > 0)
+                        { item.InternalList.RemoveAt(0); break; }
+                    }
+                    break;
+                case "得到":
+                    tbxOut.Text = ChineseHelper.GetFirstWord(tbxIn.Text);
+                    break;
+                default:break;
+                    
             }
         }
+        
     }
 }
