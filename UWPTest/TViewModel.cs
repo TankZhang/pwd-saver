@@ -62,17 +62,21 @@ namespace UWPTest
 
         public void LoadData()
         {
-            RecordList.Add(new RecordItem("fasf 阿斯顿F", "z1", "m1", "b1"));
+            RecordList.Add(new RecordItem("那撒旦W", "z2", "m2", "b2"));
+            RecordList.Add(new RecordItem("呢撒旦W", "z2", "m2", "b2"));
+            RecordList.Add(new RecordItem("被撒旦W", "z2", "m2", "b2"));
+            RecordList.Add(new RecordItem("吧撒旦W", "z2", "m2", "b2"));
+            RecordList.Add(new RecordItem("剥fasf 阿斯顿F", "z1", "m1", "b1"));
             RecordList.Add(new RecordItem("的撒旦W", "z2", "m2", "b2"));
             RecordList.Add(new RecordItem("倒萨CV", "z3", "m3", "b3"));
             RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
             RecordList.Add(new RecordItem("倒萨CV", "z3", "m3", "b3"));
             RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
+            RecordList.Add(new RecordItem("对大撒GF", "z4", "m4", "b4"));
+            RecordList.Add(new RecordItem("s倒萨CV", "z3", "m3", "b3"));
             RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
-            RecordList.Add(new RecordItem("倒萨CV", "z3", "m3", "b3"));
-            RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
-            RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
-            RecordList.Add(new RecordItem("倒萨CV", "z3", "m3", "b3"));
+            RecordList.Add(new RecordItem("23大大撒GF", "z4", "m4", "b4"));
+            RecordList.Add(new RecordItem(".倒萨CV", "z3", "m3", "b3"));
             RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
             RecordList.Add(new RecordItem("大大撒GF", "z4", "m4", "b4"));
             RecordList.Add(new RecordItem("倒萨CV", "z3", "m3", "b3"));

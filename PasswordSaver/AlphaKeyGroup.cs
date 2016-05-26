@@ -7,38 +7,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Globalization.Collation;
 
-namespace UWPTest
+namespace PasswordSaver
 {
-    /// <summary>
-    /// 用于实现按首字母分组
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-
     public class AlphaKeyGroup<T> : List<T>, INotifyPropertyChanged
     {
-        /// <summary>
-        /// 用来获取Key的委托
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public delegate string GetKeyDelegate(T item);
 
-        string _key;
-        public string Key
-        {
-            get
-            {
-                return _key;
-            }
+        //string _key;
+        //public string Key
+        //{
+        //    get
+        //    {
+        //        return _key;
+        //    }
 
-            set
-            {
-                _key = value;
-                RaisedPropertyChanged("Key");
-            }
-        }
-        //public string Key { get; private set; }
-
+        //    set
+        //    {
+        //        _key = value;
+        //        RaisedPropertyChanged("Key");
+        //    }
+        //}
+        public string Key { get; private set; }
         //ObservableCollection<T> _internalList;
         //public ObservableCollection<T> InternalList
         //{
@@ -54,7 +43,6 @@ namespace UWPTest
 
         //    }
         //}
-
         public List<T> InternalList { get; private set; }
 
         const string GlobeGroupKey = "??";
@@ -72,7 +60,6 @@ namespace UWPTest
         public AlphaKeyGroup(string key)
         {
             this.Key = key;
-            //InternalList =new ObservableCollection<T>();
             InternalList = new List<T>();
         }
 

@@ -42,7 +42,11 @@ test中常识使用SemanticZoom，暂时没成功
 2016年5月25日09:53:21
 test中使用SemanticZoom并调试成功，后面对其调整后加入到passwordsaver中。
 
-
+#2016年5月26日09:49:58
+新版本的储存模式为List<RecordItem>,解出本地数据，加密后文本开头带有版本号，开头为01|，02|等等。。
+当第三位没检测到|时候，解为ObservableCollection，当检测到01|开头时候，则解释为List。
+修改界面使得可以用。在passwordsaver中加入了semanticzoom控件。
+文件备份、恢复、版本部分还未进行测试。
 
 
 

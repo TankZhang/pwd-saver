@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -70,7 +71,7 @@ namespace PasswordSaver
         {
             try
             {
-                if (VM.RecordItems.Count > 0)
+                if (VM.RecordList.Count > 0)
                 {
                     await VM.BackupAsync(SaveType.RoamingData);
                 }
@@ -119,7 +120,7 @@ namespace PasswordSaver
             {
                 try
                 {
-                    if (VM.RecordItems.Count > 0)
+                    if (VM.RecordList.Count > 0)
                     {
                         await VM.BackupAsync(SaveType.RoamingData);
                     }
@@ -132,6 +133,50 @@ namespace PasswordSaver
         private void btnHamburg_Click(object sender, RoutedEventArgs e)
         {
             spltvMain.IsPaneOpen = !spltvMain.IsPaneOpen;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn=(Button)sender;
+            RecordItem record = (RecordItem)btn.DataContext;
+            string contentStr = btn.Content.ToString();
+            switch(contentStr)
+            {
+                case "修改":
+                    VM.GoToModify(record);
+                    break;
+                case "删除":
+                    VM.DeleteData(record);
+                    break;
+                default:break;
+                    
+            }
+        }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            StackPanel stcp = (StackPanel)VisualTreeHelper.GetParent((HyperlinkButton)sender);
+            StackPanel stcpItemHide=new StackPanel();
+            Debug.WriteLine(stcpItemHide.ToString());
+            foreach (var item in stcp.Children)
+            {
+                if (item.ToString() == "Windows.UI.Xaml.Controls.StackPanel")
+                { stcpItemHide = (StackPanel)item; }
+            }
+            if (stcpItemHide.Visibility == Visibility.Visible)
+            {
+                stcpItemHide.Visibility = Visibility.Collapsed;
+                ((HyperlinkButton)sender).Content = "详细";
+                ((HyperlinkButton)sender).Foreground = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                stcpItemHide.Visibility = Visibility.Visible;
+                ((HyperlinkButton)sender).Content = "收起";
+                ((HyperlinkButton)sender).Foreground = new SolidColorBrush(Colors.LightBlue);
+            }
+            Debug.WriteLine( stcp.Children[3].ToString());
+
         }
 
         //private void Button_Click(object sender, RoutedEventArgs e)
