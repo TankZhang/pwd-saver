@@ -257,9 +257,10 @@
                             <!--数据列表-->
                             <SemanticZoom.ZoomedInView>
                                 <ListView ItemsSource="{Binding Source={StaticResource CollectionViewSource}}"
-                                  SelectionMode="None" 
-                                  ShowsScrollingPlaceholders="True"
-                                  IsItemClickEnabled="True">
+                                          SelectionMode="None" 
+                                          IsItemClickEnabled="True"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                          >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid  Padding="0,8">
@@ -285,8 +286,12 @@
                                                             <Run Text="{Binding Note}"/>
                                                         </TextBlock>
                                                         <StackPanel Orientation="Horizontal">
-                                                            <Button Content="修改" Click="Button_Click"/>
-                                                            <Button Content="删除"  Click="Button_Click"/>
+                                                            <Button Content="修改" 
+                                                                    Click="Button_Click"
+                                                                    Margin="0,0,3,0" 
+                                                                    />
+                                                            <Button Content="删除"  
+                                                                    Click="Button_Click"/>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </StackPanel>

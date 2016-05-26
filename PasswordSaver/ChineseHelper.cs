@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordSaver
 {
+    //参考http://www.cnblogs.com/bomo/archive/2012/11/08/2760212.html，非常感谢。
     public class ChineseHelper
     {
         #region 所有的字
