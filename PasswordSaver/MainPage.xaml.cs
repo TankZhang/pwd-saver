@@ -153,76 +153,18 @@ namespace PasswordSaver
             }
         }
 
-        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        private void StackPanel_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            StackPanel stcp = (StackPanel)VisualTreeHelper.GetParent((HyperlinkButton)sender);
-            StackPanel stcpItemHide=new StackPanel();
-            Debug.WriteLine(stcpItemHide.ToString());
+            //Debug.WriteLine(sender.ToString());
+            StackPanel stcp = (StackPanel)sender;
+            StackPanel stcpItemHide = new StackPanel();
             foreach (var item in stcp.Children)
             {
                 if (item.ToString() == "Windows.UI.Xaml.Controls.StackPanel")
                 { stcpItemHide = (StackPanel)item; }
             }
-            if (stcpItemHide.Visibility == Visibility.Visible)
-            {
-                stcpItemHide.Visibility = Visibility.Collapsed;
-                ((HyperlinkButton)sender).Content = "详细";
-                ((HyperlinkButton)sender).Foreground = new SolidColorBrush(Colors.Black);
-            }
-            else
-            {
-                stcpItemHide.Visibility = Visibility.Visible;
-                ((HyperlinkButton)sender).Content = "收起";
-                ((HyperlinkButton)sender).Foreground = new SolidColorBrush(Colors.LightBlue);
-            }
-            Debug.WriteLine( stcp.Children[3].ToString());
-
+            stcpItemHide.Visibility = stcpItemHide.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
-
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    VM.IsCheck = !VM.IsCheck;
-        //    Debug.WriteLine(VM.UserInputPwd);
-        //}
-
-        //private void btnList_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string timeNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
-        //    VM.RecordItems.Add(new Models.RecordItem("website-----" + timeNow, "account-----" + timeNow, "pwd-----" + timeNow, "note-----" + timeNow));
-        //    Debug.WriteLine(VM.RecordItems.Count.ToString());
-        //    //VM.RecordItems[3].WebSite = "更改之后的！";
-        //    //string s = "da";
-        //}
-
-        //private async void btnChangeCode_Click(object sender, RoutedEventArgs e)
-        //{
-        //    FileManager.WriteCode("321");
-        //    string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-        //    str = EncryptHelper.DESEncrypt("321", str);
-        //    await FileManager.WriteToRoamingDataAsync(str);
-        //}
-
-        //private async void btnSave_Click(object sender, RoutedEventArgs e)
-        //{
-        //    VM.IsProgressRingVisible = true;
-        //    string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-        //    str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
-        //    await FileManager.WriteToRoamingDataAsync(str);
-        //    VM.IsProgressRingVisible = false;
-        //}
-
-        //private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    double width = this.ActualWidth; double height = this.ActualHeight;
-        //    if (width > height * 9 / 16)
-        //    {
-        //        Width = height * 9 / 16;
-        //    }
-        //    else
-        //    {
-        //        Height = width * 16 / 9;
-        //    }
-        //}
     }
 }
 #region 双击返回代码

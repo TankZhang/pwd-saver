@@ -360,7 +360,6 @@ namespace PasswordSaver
         //更改数据,找到与记忆条目相同的，更改之，然后返回去
         public async void ModifyData()
         {
-
             int index = RecordList.FindIndex(r => r.WebSite == RecordItemMemory.WebSite && r.Account == RecordItemMemory.Account);
             CopyRecordItem(RecordItemToModify, RecordList[index]);
             string str = await BackupAsync(SaveType.LocalState);
@@ -530,6 +529,7 @@ namespace PasswordSaver
             }
             SettingResult = "恢复成功！";
             IsCheck = false;
+            RecordList.Clear();
             UserInputPwd = "";
             IsLstMainSelected = true;
             IsProgressRingVisible = false;

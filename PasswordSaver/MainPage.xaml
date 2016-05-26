@@ -13,6 +13,7 @@
         <JumpListItemBackgroundConverter x:Key="BackgroundConverter" Enabled="LightGreen"
                                          Disabled="Transparent"/>
         <JumpListItemBackgroundConverter x:Key="ForegroundConverter" Enabled="White" Disabled="Black"/>
+
         <Style TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
@@ -262,13 +263,27 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid  Padding="0,8">
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding WebSite}"/>
-                                                    <TextBlock Text="{Binding Account}"/>
-                                                    <HyperlinkButton Name="hyplDetail" Click="HyperlinkButton_Click" Content="详细" Foreground="Black"/>
+                                                <StackPanel Tapped="StackPanel_Tapped">
+                                                    <TextBlock TextWrapping="Wrap">
+                                                        <Run Text="网站："/>
+                                                        <Run Text = "{Binding WebSite}"/>
+                                                    </TextBlock>
+                                                    <TextBlock TextWrapping="Wrap"
+                                                               Visibility="{Binding Account,Converter={StaticResource stringVisibleConverter}}">
+                                                        <Run Text="账户："/>
+                                                        <Run Text="{Binding Account}"/>
+                                                    </TextBlock>
                                                     <StackPanel Visibility="Collapsed">
-                                                        <TextBlock Text="{Binding Pwd}"/>
-                                                        <TextBlock Text="{Binding Note}"/>
+                                                        <TextBlock TextWrapping="Wrap"
+                                                                   Visibility="{Binding Pwd,Converter={StaticResource stringVisibleConverter}}">
+                                                            <Run Text="密码："/>
+                                                            <Run Text="{Binding Pwd}"/>
+                                                        </TextBlock>
+                                                        <TextBlock TextWrapping="Wrap"
+                                                                   Visibility="{Binding Note,Converter={StaticResource stringVisibleConverter}}">
+                                                            <Run Text="备注："/>
+                                                            <Run Text="{Binding Note}"/>
+                                                        </TextBlock>
                                                         <StackPanel Orientation="Horizontal">
                                                             <Button Content="修改" Click="Button_Click"/>
                                                             <Button Content="删除"  Click="Button_Click"/>

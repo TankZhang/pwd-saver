@@ -1,10 +1,13 @@
 #2016年4月22日09:37:09
 完成了FileManager类（包含json序列化，逆序列化，写入code，读出code，写入data，读出data）
 完成了EncryptHelper类（包含了DES加密，解密。MD5针对key和针对密码的加密方式）
+
 #2016年4月22日17:55:39
 开始运行，显示计算器界面，生成VM时候得到内存中的密码的MD5校验值RightPwdMd5。当输入的数字得到的MD5校验值与RightPwdMd5相同时将IsCheck设置为True。同时解出密码信息，显示密码信息列表。
+
 #2016年4月23日10:55:18
 尝试各种办法。但是DataTemplate中的控件中的按钮无法绑定到VM中的命令上面去。改变策略，直接使用click到MainPage后台进行更改，然后找出父控件，得到UcDataItem的子控件，得到它的DataContext进行修改！
+
 #2016年4月30日11:16:18
 一周没提交了，项目搞得很烦。
 完成修改条目功能。
@@ -12,33 +15,43 @@
 在SplitView.Pane中点击收藏夹会转至grdPwdsList（通过codeBehind）。
 在grdPwdsList中点击修改，会转至ucItemDetail（通过VM中的ModifyIn函数，其中记录RecordItemMemory和RecordItemToModify，并将IsUcItemDetailVisible可见，IsGrdPwdsListVisible隐藏，IsModifyOrAdd设置为true，即Modify，并且显示back按钮和title为修改条目）。
 在Modify的ucItemDetail中可以修改，然后点击修改会通过VM.ModifyData来处理并返回收藏列表。
+
 #2016年4月30日15:31:14
 加入Add功能，点击菜单中的Add进入ucItemDetail，输入后点击保存，首先检查格式，再检查是否已经存在当前网站和账号，再通过保存实现。
 加入DeleteData功能，通过在UcDataItem中点击删除，调用VM的DeleteData，首先去掉本地RecordItems中的对应数据，然后保存。
+
 #2016年4月30日19:33:30
 加入备份功能，将当前的RecordItems信息用123密码通过加密算法后保存到文档->pwsv.pwsv中。
 加入读取备份功能，将当前文档中的pwsv.pwsv的信息读取出来，然后用当前的密码重新加密存到本地。
 加入退出按钮，点击退出或者按下返回键将退出应用。
+
 #2016年5月1日12:28:23
 当程序最小化时候自动将对应位进行设置，将其调节至计算器界面，保护密码。
 原来调试过程中程序默认一直处于前台不会进入suspending函数。
+
 #2016年5月1日23:40:19
 优化各种UI，以及……PS过了试用期了！！只能手写图标了。
+
 #2016年5月2日00:13:26
 不让用documentlibrary，只能用音乐库了。
+
 #2016年5月2日13:02:20
 提交过后还是无法同步信息。懵了。等时间长点看看会不会。
 将roamingdata中的文件加上了.pwsv后缀。同时更新了保存密码的方式。
+
 #2016年5月19日16:23:17
 长时间忘记写了。。
 加入新的备份方式。现今有四种，密文roaming备份，密文onedrive备份，密文file备份，明文file备份。
 更新图标，利用官方PS模板处理。
+
 #2016年5月24日09:01:56
 修复bug，使得恢复时候不需要恢复前后密码一致。
 不再提供roaming备份功能，自动进行roaming备份，恢复时候看人品咯。。
 修改UcDataItem使得不存在的数据就不显示。
+
 2016年5月24日22:39:15
 test中常识使用SemanticZoom，暂时没成功
+
 2016年5月25日09:53:21
 test中使用SemanticZoom并调试成功，后面对其调整后加入到passwordsaver中。
 
@@ -48,7 +61,9 @@ test中使用SemanticZoom并调试成功，后面对其调整后加入到passwordsaver中。
 修改界面使得可以用。在passwordsaver中加入了semanticzoom控件。
 文件备份、恢复、版本部分还未进行测试。
 
-
+2016年5月26日16:26:27
+测试文件备份，恢复，版本处理。
+完善semanticzoom控件，完善AlphaKeyGroup类，加入处理多音字的功能。
 
 
 

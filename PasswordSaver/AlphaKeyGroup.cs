@@ -9,6 +9,7 @@ using Windows.Globalization.Collation;
 
 namespace PasswordSaver
 {
+    //参考http://edi.wang/post/2016/3/25/windows-10-uwp-fark-pinyin-group?utm_source=tuicool&utm_medium=referral,非常感谢！
     public class AlphaKeyGroup<T> : List<T>, INotifyPropertyChanged
     {
         public delegate string GetKeyDelegate(T item);
@@ -99,20 +100,12 @@ namespace PasswordSaver
             foreach (T item in items)
             {
                 int index = 0;
+                string[] label = ChineseHelper.GetFirstWord(keySelector(item));
+                for (int i = 0; i < label.Length; i++)
                 {
-                    string label = ChineseHelper.GetFirstWord(keySelector(item));
-                    //string label = slg.Lookup(keySelector(item));
-                    index = list.FindIndex(alphaKeyGroup => (alphaKeyGroup.Key.Equals(label, StringComparison.CurrentCulture)));
-                }
-
-                if (index >= 0 && index < list.Count)
-                {
+                    string lableKey = label[i];
+                    index = list.FindIndex(alphaKeyGroup => (alphaKeyGroup.Key.Equals(lableKey, StringComparison.CurrentCulture)));
                     list[index].InternalList.Add(item);
-                }
-                else
-                {
-                    //临时解决方案，中文加入？？中
-                    list[list.Count - 1].InternalList.Add(item);
                 }
             }
 

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordSaver
+namespace ConsoleTest
 {
-    public class ChineseHelper
+    class Program
     {
         #region 所有的字
-        private static readonly string[][] _Allhz =
+        private static readonly string[][] AllChineseWord =
             new string[][]
             {
                 new string[]{"A","啊阿呵吖嗄腌锕錒"},
@@ -489,98 +489,56 @@ namespace PasswordSaver
                 new string[]{"Zuo","做作坐左座昨凿琢撮佐笮酢唑祚胙怍阼柞乍侳咗岝岞挫捽柮椊砟秨稓筰糳繓苲莋葃葄蓙袏諎醋鈼鑿飵嘬阝"}
             };
         #endregion
-
-        public static string GetPinyin(string str)
+        static void Main(string[] args)
         {
-            StringBuilder rtnSb = new StringBuilder("");
-            char[] charary = str.ToCharArray();
-            for (int i = 0; i < charary.Length; i++)
+            Dictionary<char, List<string>> dicPolyphoneWord = new Dictionary<char, List<string>>();
+            int row = AllChineseWord.Count();
+            for (int i = 0; i < row; i++)
             {
-                var ch = charary[i];
-                if (ChineseHelper.IsCharChinese(ch))
+                int column = AllChineseWord[i][1].Length;
+                
+                for (int j = 0; j < column; j++)
                 {
-                    for (int j = 0; j < _Allhz.Length; j++)
+                    char wordToCheck = AllChineseWord[i][1][j];
+                    if (dicPolyphoneWord.Keys.Contains(wordToCheck))
+                        continue;
+                    //从下一行开始找相同的字
+                    for (int k = i + 1; k < row; k++)
                     {
-                        if (_Allhz[j][1].IndexOf(ch) != -1)
+                        int columnChild = AllChineseWord[k][1].Length;
+                        for (int l = 0; l < columnChild; l++)
                         {
-                            rtnSb.Append(_Allhz[j][0]);
-                            break;
+                            if (AllChineseWord[k][1][l] == wordToCheck)
+                            {
+                                if (dicPolyphoneWord.Keys.Contains(wordToCheck))
+                                {
+                                    dicPolyphoneWord[wordToCheck].Add(AllChineseWord[k][0]);
+                                }
+                                else
+                                {
+                                    List<string> lst = new List<string>();
+                                    lst.Add(AllChineseWord[i][0]);
+                                    lst.Add(AllChineseWord[k][0]);
+                                    dicPolyphoneWord.Add(wordToCheck, lst);
+                                }
+                            }
                         }
                     }
+
                 }
-                else
-                    rtnSb.Append(ch);
             }
-            return rtnSb.ToString();
-        }
 
-        //是否是汉字
-        public static bool IsCharChinese(char c)
-        {
-            System.Text.RegularExpressions.Regex regex = new
-                System.Text.RegularExpressions.Regex(@"[\u4e00-\u9fa5]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (regex.IsMatch(c.ToString()))
+            foreach (var item in dicPolyphoneWord)
             {
-                return true;
-            }
-            return false;
-        }
-
-        //返回多音字
-        public static string[] GetPolyphone(char c)
-        {
-            List<string> list = new List<string>();
-
-            for (int j = 0; j < _Allhz.Length; j++)
-            {
-                if (_Allhz[j][1].IndexOf(c) != -1)
+                Console.WriteLine("\n\n\n");
+                Console.WriteLine(item.Key);
+                foreach (var item1 in item.Value)
                 {
-                    list.Add(_Allhz[j][0]);
+                    Console.WriteLine(item1);
                 }
             }
-            return list.ToArray();
-        }
-
-        //返回首字母
-        public static string[] GetFirstWord(string str)
-        {
-            char ch = str[0];
-            List<string> list = new List<string>();
-            if (IsCharChinese(ch))
-            {
-                string[] strQuanPin = GetPolyphone(ch);
-                for (int i = 0; i < strQuanPin.Length; i++)
-                {
-                    strQuanPin[i] = strQuanPin[i].Substring(0, 1);
-                }
-                for (int i = 0; i < strQuanPin.Length; i++)
-                {
-                    bool flag = true;
-                    for (int j = i + 1; j < strQuanPin.Length; j++)
-                    {
-                        if (strQuanPin[i] == strQuanPin[j])
-                        {
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if (flag)
-                        list.Add(strQuanPin[i]);
-                }
-                return list.ToArray();
-            }
-            else
-            {
-                char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-                if (alpha.Contains(ch.ToString().ToUpper()[0]))
-                    return new string[] { ch.ToString().ToUpper() };
-                int x;
-                if (int.TryParse(ch.ToString(), out x))
-                    return new string[] { "#" };
-                else
-                    return new string[] { "&" };
-            }
+            Console.WriteLine("结束");
+            Console.ReadKey();
         }
     }
-
 }
