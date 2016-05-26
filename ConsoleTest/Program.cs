@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -528,15 +529,24 @@ namespace ConsoleTest
                 }
             }
 
+            FileStream fs = new FileStream(@"F:\result.txt", FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
             foreach (var item in dicPolyphoneWord)
             {
-                Console.WriteLine("\n\n\n");
-                Console.WriteLine(item.Key);
+                sw.WriteLine("\n\n\n");
+                sw.WriteLine(item.Key);
                 foreach (var item1 in item.Value)
                 {
-                    Console.WriteLine(item1);
+                    sw.WriteLine(item1);
                 }
             }
+            sw.WriteLine("结束");
+            //清空缓冲区
+            sw.Flush();
+            //关闭流
+            sw.Close();
+            fs.Close();
+
             Console.WriteLine("结束");
             Console.ReadKey();
         }
