@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -70,7 +71,7 @@ namespace PasswordSaver
         {
             try
             {
-                if (VM.RecordItems.Count > 0)
+                if (VM.RecordList.Count > 0)
                 {
                     await VM.BackupAsync(SaveType.RoamingData);
                 }
@@ -89,21 +90,21 @@ namespace PasswordSaver
                 VM.IsUcItemDetailVisible = false;
                 VM.Title = "主页";
                 grdPwdsList.Visibility = Visibility.Collapsed;
-                grdSet.Visibility = Visibility.Collapsed;
+                //grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiList.IsSelected)
             {
                 VM.Title = "收藏列表";
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Visible;
-                grdSet.Visibility = Visibility.Collapsed;
+                //grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiAdd.IsSelected)
             {
                 VM.Title = "添加条目";
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Collapsed;
-                grdSet.Visibility = Visibility.Collapsed;
+                //grdSet.Visibility = Visibility.Collapsed;
                 VM.GoToAdd();
 
             }
@@ -112,14 +113,14 @@ namespace PasswordSaver
                 VM.Title = "设置";
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Collapsed;
-                grdSet.Visibility = Visibility.Visible;
+                //grdSet.Visibility = Visibility.Visible;
                 VM.SettingResult = "";
             }
             if (lstiQuit.IsSelected)
             {
                 try
                 {
-                    if (VM.RecordItems.Count > 0)
+                    if (VM.RecordList.Count > 0)
                     {
                         await VM.BackupAsync(SaveType.RoamingData);
                     }
@@ -134,50 +135,36 @@ namespace PasswordSaver
             spltvMain.IsPaneOpen = !spltvMain.IsPaneOpen;
         }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    VM.IsCheck = !VM.IsCheck;
-        //    Debug.WriteLine(VM.UserInputPwd);
-        //}
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn=(Button)sender;
+            RecordItem record = (RecordItem)btn.DataContext;
+            string contentStr = btn.Content.ToString();
+            switch(contentStr)
+            {
+                case "修改":
+                    VM.GoToModify(record);
+                    break;
+                case "删除":
+                    VM.DeleteData(record);
+                    break;
+                default:break;
+                    
+            }
+        }
 
-        //private void btnList_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string timeNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
-        //    VM.RecordItems.Add(new Models.RecordItem("website-----" + timeNow, "account-----" + timeNow, "pwd-----" + timeNow, "note-----" + timeNow));
-        //    Debug.WriteLine(VM.RecordItems.Count.ToString());
-        //    //VM.RecordItems[3].WebSite = "更改之后的！";
-        //    //string s = "da";
-        //}
-
-        //private async void btnChangeCode_Click(object sender, RoutedEventArgs e)
-        //{
-        //    FileManager.WriteCode("321");
-        //    string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-        //    str = EncryptHelper.DESEncrypt("321", str);
-        //    await FileManager.WriteToRoamingDataAsync(str);
-        //}
-
-        //private async void btnSave_Click(object sender, RoutedEventArgs e)
-        //{
-        //    VM.IsProgressRingVisible = true;
-        //    string str = FileManager.GetJsonString<ObservableCollection<RecordItem>>(VM.RecordItems);
-        //    str = EncryptHelper.DESEncrypt(VM.RightPwd, str);
-        //    await FileManager.WriteToRoamingDataAsync(str);
-        //    VM.IsProgressRingVisible = false;
-        //}
-
-        //private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    double width = this.ActualWidth; double height = this.ActualHeight;
-        //    if (width > height * 9 / 16)
-        //    {
-        //        Width = height * 9 / 16;
-        //    }
-        //    else
-        //    {
-        //        Height = width * 16 / 9;
-        //    }
-        //}
+        private void StackPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //Debug.WriteLine(sender.ToString());
+            StackPanel stcp = (StackPanel)sender;
+            StackPanel stcpItemHide = new StackPanel();
+            foreach (var item in stcp.Children)
+            {
+                if (item.ToString() == "Windows.UI.Xaml.Controls.StackPanel")
+                { stcpItemHide = (StackPanel)item; }
+            }
+            stcpItemHide.Visibility = stcpItemHide.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
     }
 }
 #region 双击返回代码

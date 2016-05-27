@@ -45,7 +45,14 @@ namespace PasswordSaver
         //通过储存的字符串得到密码的MD5校验
         public static string GetCode(string str)
         {
-            return str.Substring(0, 32);
+            string version = str.Substring(0, 3);
+            switch (version)
+            {
+                case "02|":
+                    return str.Substring(3, 32);
+                default:
+                    return str.Substring(0, 32);
+            }
         }
              
 

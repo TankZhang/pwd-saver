@@ -24,25 +24,10 @@ namespace UWPTest
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent(); 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = (Button)sender;
-            if((string)btn.Content=="添加")
-            {
-                //TVM.Records[2].Add(new RecordItem("这", "倒萨", "大", "打算"));
-                TVM.LoadData1();
-            }
-            else
-            {
-                foreach (var item in TVM.Records)
-                {
-                    if(item.InternalList.Count>0)
-                    { item.InternalList.RemoveAt(0);break; }
-                }
-            }
-        }
+        
+        
     }
 }

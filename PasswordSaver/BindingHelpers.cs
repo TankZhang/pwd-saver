@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Data;
 
 namespace PasswordSaver
 {
+    
     //如果string不为空，则显示，否则不显示
     public class StringVisibleBindingHelper : IValueConverter
     {

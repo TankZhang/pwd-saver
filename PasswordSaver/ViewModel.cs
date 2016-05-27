@@ -147,22 +147,7 @@ namespace PasswordSaver
                 RaisedPropertyChanged("IsProgressRingVisible");
             }
         }
-
-        ObservableCollection<RecordItem> _recordItems;
-        public ObservableCollection<RecordItem> RecordItems
-        {
-            get
-            {
-                return _recordItems;
-            }
-
-            set
-            {
-                _recordItems = value;
-                RaisedPropertyChanged("RecordItems");
-            }
-        }
-
+       
         RecordItem _recordItemMemory;
         public RecordItem RecordItemMemory
         {
@@ -269,6 +254,24 @@ namespace PasswordSaver
                 RaisedPropertyChanged("IsLstMainSelected");
             }
         }
+
+        public List<RecordItem> RecordList { get; set; }
+
+
+        ObservableCollection<AlphaKeyGroup<RecordItem>> _records;
+        public ObservableCollection<AlphaKeyGroup<RecordItem>> Records
+        {
+            get
+            {
+                return _records;
+            }
+
+            set
+            {
+                _records = value;
+                RaisedPropertyChanged("Records");
+            }
+        }
         #endregion
 
         #region 各类命令
@@ -317,6 +320,17 @@ namespace PasswordSaver
         }
         #endregion
         
+        //刷新Records
+        private void UpdateRecords()
+        {
+            Records.Clear();
+            List<AlphaKeyGroup<RecordItem>> groupData = AlphaKeyGroup<RecordItem>.CreateGroups(RecordList, (RecordItem r) => r.WebSite, true);
+            foreach (var item in groupData)
+            {
+                Records.Add(item);
+            }
+        }
+
         //校验密码，如果对的就更新当前RecordItems
         public async Task<bool> CheckPasswordAsync(string pwd)
         {
@@ -325,13 +339,12 @@ namespace PasswordSaver
                 IsCheck = true;
                 RightPwd = pwd;
                 //如果现有列表中没有数据，即打开应用的第一次验证
-                if (RecordItems.Count < 1)
+                if (RecordList.Count < 1)
                 {
                     IsProgressRingVisible = true;
                     string str = await FileManager.RecoverAsync(SaveType.LocalState);
                     if (!str.StartsWith("-"))
                     {
-                        str = str.Substring(33);
                         string exStr = DecodeRecord(str);
                         if (exStr.StartsWith("-"))
                             Title = exStr.Substring(1);
@@ -347,16 +360,25 @@ namespace PasswordSaver
         //更改数据,找到与记忆条目相同的，更改之，然后返回去
         public async void ModifyData()
         {
-            int index = FindIndexOf(RecordItemMemory.WebSite, RecordItemMemory.Account);
-            CopyRecordItem(RecordItemToModify, RecordItems[index]);
-            string str = await SaveRecordAsync(SaveType.LocalState);
-            if (str.StartsWith("-"))
-                Title = str.Substring(1);
+            if((RecordItemMemory.WebSite==RecordItemToModify.WebSite&&RecordItemMemory.Account==RecordItemToModify.Account)
+                ||(RecordList.FindIndex(r=>r.WebSite==RecordItemToModify.WebSite&&r.Account==RecordItemToModify.Account)<0))
+            {
+                int index = RecordList.FindIndex(r => r.WebSite == RecordItemMemory.WebSite && r.Account == RecordItemMemory.Account);
+                CopyRecordItem(RecordItemToModify, RecordList[index]);
+                string str = await BackupAsync(SaveType.LocalState);
+                if (str.StartsWith("-"))
+                    Title = str.Substring(1);
+                else
+                    Title = "收藏列表";
+                IsUcItemDetailVisible = false;
+                IsGrdPwdsListVisible = true;
+                IsBackVisible = false;
+            }
             else
-                Title = "收藏列表";
-            IsUcItemDetailVisible = false;
-            IsGrdPwdsListVisible = true;
-            IsBackVisible = false;
+            {
+                RecordItemToModify.WebSite = "错误！已有此网站与账号！";
+            }
+           
         }
 
         //进入更改数据的设置,RecordItemMemory为记忆条目，RecordItemToModify为被绑定待修改条目
@@ -388,7 +410,7 @@ namespace PasswordSaver
                 RecordItemToModify.WebSite = "错误！网站名称不能为空";
                 return;
             }
-            int index = FindIndexOf(RecordItemToModify.WebSite, RecordItemToModify.Account);
+            int index = RecordList.FindIndex(r => r.WebSite == RecordItemToModify.WebSite && r.Account == RecordItemToModify.Account);
             if (index > -1)
             {
                 RecordItemToModify.WebSite = "错误！已存在当前网站";
@@ -398,8 +420,8 @@ namespace PasswordSaver
             {
                 RecordItem r = new RecordItem();
                 CopyRecordItem(RecordItemToModify, r);
-                RecordItems.Add(r);
-                string titleStr = await SaveRecordAsync(SaveType.LocalState);
+                RecordList.Add(r);
+                string titleStr = await BackupAsync(SaveType.LocalState);
                 if (titleStr.StartsWith("-"))
                     Title = titleStr.Substring(1);
                 else
@@ -414,9 +436,9 @@ namespace PasswordSaver
         //删除条目，
         public async void DeleteData(RecordItem recordItem)
         {
-            int index = FindIndexOf(recordItem.WebSite, recordItem.Account);
-            RecordItems.RemoveAt(index);
-            await SaveRecordAsync(SaveType.LocalState);
+            int index = RecordList.FindIndex(r => r.WebSite == recordItem.WebSite && r.Account == recordItem.Account);
+            RecordList.RemoveAt(index);
+            await BackupAsync(SaveType.LocalState);
         }
 
         //返回函数
@@ -435,7 +457,7 @@ namespace PasswordSaver
             RightPwd = pwd;
             RightPwdMd5 = pwdMd5;
             string codeStr = CodeRecord();
-            string strToSave = pwdMd5 + "|" + codeStr;
+            string strToSave = "02|" + pwdMd5 + "|" + codeStr;
             string result = await FileManager.BackupAsync(strToSave, SaveType.LocalState);
             if (result.StartsWith("-"))
                 SettingResult = result.Substring(1);
@@ -443,19 +465,33 @@ namespace PasswordSaver
         }
 
         //备份函数
-        public async Task BackupAsync(SaveType st)
+        public async Task<string> BackupAsync(SaveType st)
         {
             IsProgressRingVisible = true;
+            UpdateRecords();
             SettingResult = "开始备份...";
             string codeStr = CodeRecord();
-            string strToSave = RightPwdMd5 + "|" + codeStr;
+            string strToSave = "02|" + RightPwdMd5 + "|" + codeStr;
             string strResult = await FileManager.BackupAsync(strToSave, st);
             if (strResult.StartsWith("-"))
                 SettingResult = strResult.Substring(1);
             else
-                SettingResult = "备份成功！";
+                SettingResult = "备份成功！"; 
+            
             IsProgressRingVisible = false;
+            return strResult;
         }
+
+        ////将当前的数据全部保存
+        //private async Task<string> SaveRecordAsync(SaveType st)
+        //{
+        //    IsProgressRingVisible = true;
+        //    string codeStr = CodeRecord();
+        //    string strToSave = "02|" + RightPwdMd5 + "|" + codeStr;
+        //    string returnStr = await FileManager.BackupAsync(strToSave, st);
+        //    IsProgressRingVisible = false;
+        //    return returnStr;
+        //}
 
         //明文导出数据
         public async void ExportData()
@@ -463,7 +499,7 @@ namespace PasswordSaver
             IsProgressRingVisible = true;
             SettingResult = "开始备份...";
             string strToSave = "";
-            foreach (RecordItem item in RecordItems)
+            foreach (RecordItem item in RecordList)
             {
                 strToSave += "网站：" + item.WebSite + "\n";
                 strToSave += "账号：" + item.Account + "\n";
@@ -490,25 +526,21 @@ namespace PasswordSaver
                 IsProgressRingVisible = false;
                 return;
             }
-            RightPwdMd5 = strRecover.Substring(0, 32);
             await FileManager.BackupAsync(strRecover, SaveType.LocalState);
-            RecordItems.Clear();
+            switch (strRecover.Substring(0,3))
+            {
+                case "02|":
+                    RightPwdMd5 = strRecover.Substring(3, 32);
+                    break;
+                default:
+                    RightPwdMd5 = strRecover.Substring(0, 32);
+                    break;
+            }
             SettingResult = "恢复成功！";
             IsCheck = false;
+            RecordList.Clear();
             UserInputPwd = "";
             IsLstMainSelected = true;
-            //string codeStr = strRecover.Substring(33);
-            //string strResult = DecodeRecord(codeStr);
-            //if (strResult.StartsWith("-"))
-            //    SettingResult = strResult.Substring(1);
-            //else
-            //{
-            //    await SaveRecordAsync(SaveType.LocalState);
-            //    SettingResult = "恢复成功！";
-            //    IsCheck = false;
-            //    UserInputPwd = "";
-            //    IsLstMainSelected = true;
-            //}
             IsProgressRingVisible = false;
         }
 
@@ -521,45 +553,32 @@ namespace PasswordSaver
             copyTo.Note = copyFrom.Note;
         }
 
-        //找到条目列表中的某个数据的下标
-        private int FindIndexOf(string website, string account)
-        {
-            for (int i = 0; i < RecordItems.Count; i++)
-            {
-                if (RecordItems[i].WebSite == website && RecordItems[i].Account == account)
-                    return i;
-            }
-            return -1;
-        }
 
-        //将当前的数据全部保存
-        private async Task<string> SaveRecordAsync(SaveType st)
-        {
-            IsProgressRingVisible = true;
-            string codeStr = CodeRecord();
-            string strToSave = RightPwdMd5 + "|" + codeStr;
-            string returnStr = await FileManager.BackupAsync(strToSave, st);
-            IsProgressRingVisible = false;
-            return returnStr;
-        }
-
-        //将当前的record生成新的str
+        //将当前的RecordList生成新的str
         private string CodeRecord()
         {
-            string jsonStr = FileManager.GetJsonString<ObservableCollection<RecordItem>>(RecordItems);
+            string jsonStr = FileManager.GetJsonString<List<RecordItem>>(RecordList);
             return EncryptHelper.DESEncrypt(RightPwd, jsonStr);
         }
 
-        //将当前str读取到RecordItems中
+        //将文件中的所有的str读取到RecordList中
         private string DecodeRecord(string str)
         {
+            string version = str.Substring(0, 3);
             try
             {
-                string decryptStr = EncryptHelper.DESDecrypt(RightPwd, str);
-                RecordItems.Clear();
-                foreach (RecordItem item in FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr))
-                { RecordItems.Add(item); }
-                IsProgressRingVisible = false;
+                switch (version)
+                {
+                    case "02|":
+                        string decryptStr02= EncryptHelper.DESDecrypt(RightPwd, str.Substring(36));
+                        RecordList = FileManager.ReadFromJson<List<RecordItem>>(decryptStr02);
+                        break;
+                    default:
+                        string decryptStr01= EncryptHelper.DESDecrypt(RightPwd, str.Substring(33));
+                        RecordList = FileManager.ReadFromJson<ObservableCollection<RecordItem>>(decryptStr01).ToList();
+                        break;
+                }
+                UpdateRecords();
                 return "1";
             }
             catch (Exception ex) { return "-" + ex.Message; }
@@ -580,7 +599,8 @@ namespace PasswordSaver
             { RightPwdMd5 = EncryptHelper.PwdEncrypt("123"); }
             else
             { RightPwdMd5 = FileManager.GetCode(str); }
-            RecordItems = new ObservableCollection<RecordItem>();
+            RecordList = new List<RecordItem>();
+            Records = new ObservableCollection<AlphaKeyGroup<RecordItem>>();
             RecordItemMemory = new RecordItem();
             RecordItemToModify = new RecordItem();
             IsBackVisible = false;

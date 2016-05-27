@@ -106,7 +106,7 @@ namespace PasswordSaver
             ((MainPage)(((Frame)Window.Current.Content).Content)).VM.IsLstMainSelected = true;
             try
             {
-                if (((MainPage)(((Frame)Window.Current.Content).Content)).VM.RecordItems.Count > 0)
+                if (((MainPage)(((Frame)Window.Current.Content).Content)).VM.RecordList.Count > 0)
                 {
                    await ((MainPage)(((Frame)Window.Current.Content).Content)).VM.BackupAsync(SaveType.RoamingData);
                 }

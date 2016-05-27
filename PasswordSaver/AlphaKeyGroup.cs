@@ -7,38 +7,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Globalization.Collation;
 
-namespace UWPTest
+namespace PasswordSaver
 {
-    /// <summary>
-    /// 用于实现按首字母分组
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-
+    //参考http://edi.wang/post/2016/3/25/windows-10-uwp-fark-pinyin-group?utm_source=tuicool&utm_medium=referral,非常感谢！
     public class AlphaKeyGroup<T> : List<T>, INotifyPropertyChanged
     {
-        /// <summary>
-        /// 用来获取Key的委托
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public delegate string GetKeyDelegate(T item);
 
-        string _key;
-        public string Key
-        {
-            get
-            {
-                return _key;
-            }
+        //string _key;
+        //public string Key
+        //{
+        //    get
+        //    {
+        //        return _key;
+        //    }
 
-            set
-            {
-                _key = value;
-                RaisedPropertyChanged("Key");
-            }
-        }
-        //public string Key { get; private set; }
-
+        //    set
+        //    {
+        //        _key = value;
+        //        RaisedPropertyChanged("Key");
+        //    }
+        //}
+        public string Key { get; private set; }
         //ObservableCollection<T> _internalList;
         //public ObservableCollection<T> InternalList
         //{
@@ -54,7 +44,6 @@ namespace UWPTest
 
         //    }
         //}
-
         public List<T> InternalList { get; private set; }
 
         const string GlobeGroupKey = "??";
@@ -72,7 +61,6 @@ namespace UWPTest
         public AlphaKeyGroup(string key)
         {
             this.Key = key;
-            //InternalList =new ObservableCollection<T>();
             InternalList = new List<T>();
         }
 
@@ -112,20 +100,12 @@ namespace UWPTest
             foreach (T item in items)
             {
                 int index = 0;
+                string[] label = ChineseHelper.GetFirstWord(keySelector(item));
+                for (int i = 0; i < label.Length; i++)
                 {
-                    string label = ChineseHelper.GetFirstWord(keySelector(item));
-                    //string label = slg.Lookup(keySelector(item));
-                    index = list.FindIndex(alphaKeyGroup => (alphaKeyGroup.Key.Equals(label, StringComparison.CurrentCulture)));
-                }
-
-                if (index >= 0 && index < list.Count)
-                {
+                    string lableKey = label[i];
+                    index = list.FindIndex(alphaKeyGroup => (alphaKeyGroup.Key.Equals(lableKey, StringComparison.CurrentCulture)));
                     list[index].InternalList.Add(item);
-                }
-                else
-                {
-                    //临时解决方案，中文加入？？中
-                    list[list.Count - 1].InternalList.Add(item);
                 }
             }
 

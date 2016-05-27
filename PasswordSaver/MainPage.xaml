@@ -10,6 +10,10 @@
     Loaded="Page_Loaded"
     >
     <Page.Resources>
+        <JumpListItemBackgroundConverter x:Key="BackgroundConverter" Enabled="LightGreen"
+                                         Disabled="Transparent"/>
+        <JumpListItemBackgroundConverter x:Key="ForegroundConverter" Enabled="White" Disabled="Black"/>
+
         <Style TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
@@ -156,11 +160,13 @@
                        RelativePanel.AlignVerticalCenterWithPanel="True"
                        />
         </RelativePanel>
+        <!--下面的splitView储存其他所有的内容-->
         <SplitView Grid.Row="1"
                    DisplayMode="CompactInline"
                    Name="spltvMain"
                    OpenPaneLength="120"
                    CompactPaneLength="45">
+            <!--splitview的Pane界面-->
             <SplitView.Pane>
                 <ListBox SelectionMode="Single"
                          SelectionChanged="ListBox_SelectionChanged"
@@ -229,15 +235,127 @@
                                        Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
-                                 
                 </ListBox>
             </SplitView.Pane>
+            <!--splitView中的内容界面-->
             <SplitView.Content>
                 <Grid Name="grdContent">
                     <!--收藏夹的显示grid-->
                     <Grid Name="grdPwdsList"
                               Visibility="{Binding IsGrdPwdsListVisible,Converter={StaticResource visibleConverter},Mode=TwoWay}">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <Grid.Resources>
+                            <CollectionViewSource x:Key="CollectionViewSource" IsSourceGrouped="True" 
+                                          ItemsPath="InternalList"
+                                          Source="{Binding Records}"/>
+                        </Grid.Resources>
+                        <SemanticZoom>
+                            <SemanticZoom.Style>
+                                <Style TargetType="SemanticZoom">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </SemanticZoom.Style>
+                            <!--数据列表-->
+                            <SemanticZoom.ZoomedInView>
+                                <ListView ItemsSource="{Binding Source={StaticResource CollectionViewSource}}"
+                                          SelectionMode="None" 
+                                          IsItemClickEnabled="True"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                          >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid  Padding="0,8">
+                                                <StackPanel Tapped="StackPanel_Tapped">
+                                                    <TextBlock TextWrapping="Wrap">
+                                                        <Run Text="网站："/>
+                                                        <Run Text = "{Binding WebSite}"/>
+                                                    </TextBlock>
+                                                    <TextBlock TextWrapping="Wrap"
+                                                               Visibility="{Binding Account,Converter={StaticResource stringVisibleConverter}}">
+                                                        <Run Text="账户："/>
+                                                        <Run Text="{Binding Account}"/>
+                                                    </TextBlock>
+                                                    <StackPanel Visibility="Collapsed">
+                                                        <TextBlock TextWrapping="Wrap"
+                                                                   Visibility="{Binding Pwd,Converter={StaticResource stringVisibleConverter}}">
+                                                            <Run Text="密码："/>
+                                                            <Run Text="{Binding Pwd}"/>
+                                                        </TextBlock>
+                                                        <TextBlock TextWrapping="Wrap"
+                                                                   Visibility="{Binding Note,Converter={StaticResource stringVisibleConverter}}">
+                                                            <Run Text="备注："/>
+                                                            <Run Text="{Binding Note}"/>
+                                                        </TextBlock>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Button Content="修改" 
+                                                                    Click="Button_Click"
+                                                                    Margin="0,0,3,0" 
+                                                                    />
+                                                            <Button Content="删除"  
+                                                                    Click="Button_Click"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            <Setter Property="Margin" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <!--列表头-->
+                                    <ListView.GroupStyle>
+                                        <GroupStyle HidesIfEmpty="True" >
+                                            <GroupStyle.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Key}" FontSize="25" Foreground="LightGreen"/>
+                                                </DataTemplate>
+                                            </GroupStyle.HeaderTemplate>
+                                        </GroupStyle>
+                                    </ListView.GroupStyle>
+                                </ListView>
+                            </SemanticZoom.ZoomedInView>
+                            <!--排序列表-->
+                            <SemanticZoom.ZoomedOutView>
+                                <GridView ItemsSource="{Binding Source={StaticResource CollectionViewSource},Path=CollectionGroups}">
+                                    <GridView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapGrid MaximumRowsOrColumns="6" VerticalAlignment="Top" Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </GridView.ItemsPanel>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding Converter={StaticResource BackgroundConverter}}">
+                                                <TextBlock Text="{Binding Group.Key}" HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{Binding Converter={StaticResource ForegroundConverter}}"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
+                                    <GridView.Template>
+                                        <ControlTemplate>
+                                            <ScrollViewer ScrollViewer.VerticalScrollMode="Enabled">
+                                                <Viewbox Stretch="Uniform" Margin="8"  VerticalAlignment="Top" 
+                                             ScrollViewer.VerticalScrollMode="Enabled" StretchDirection="Both" >
+                                                    <ItemsPresenter  />
+                                                </Viewbox>
+                                            </ScrollViewer>
+                                        </ControlTemplate>
+                                    </GridView.Template>
+                                </GridView>
+                            </SemanticZoom.ZoomedOutView>
+                        </SemanticZoom>
+                        <!--<ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <StackPanel Orientation="Vertical">
                                 <ListView ItemsSource="{x:Bind VM.RecordItems}"
                                               Name="lstvList"
@@ -250,14 +368,14 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </StackPanel>
-                        </ScrollViewer>
+                        </ScrollViewer>-->
                     </Grid>
                     <!--添加或者修改的控件显示-->
                     <local:UcItemDetail x:Name="ucItemDetail"
                                             Visibility="{Binding IsUcItemDetailVisible,Converter={StaticResource visibleConverter}}"/>
                     <!--设置部分的grid-->
                     <Grid Name="grdSet"
-                          Visibility="Collapsed">
+                          Visibility="{Binding ElementName=lstiSet, Path=IsSelected, Converter={StaticResource visibleConverter}}">
                         <local:UcSettings />
                     </Grid>
                     <!--进入界面计算器的显示-->
