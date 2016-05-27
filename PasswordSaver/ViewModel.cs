@@ -360,16 +360,25 @@ namespace PasswordSaver
         //更改数据,找到与记忆条目相同的，更改之，然后返回去
         public async void ModifyData()
         {
-            int index = RecordList.FindIndex(r => r.WebSite == RecordItemMemory.WebSite && r.Account == RecordItemMemory.Account);
-            CopyRecordItem(RecordItemToModify, RecordList[index]);
-            string str = await BackupAsync(SaveType.LocalState);
-            if (str.StartsWith("-"))
-                Title = str.Substring(1);
+            if((RecordItemMemory.WebSite==RecordItemToModify.WebSite&&RecordItemMemory.Account==RecordItemToModify.Account)
+                ||(RecordList.FindIndex(r=>r.WebSite==RecordItemToModify.WebSite&&r.Account==RecordItemToModify.Account)<0))
+            {
+                int index = RecordList.FindIndex(r => r.WebSite == RecordItemMemory.WebSite && r.Account == RecordItemMemory.Account);
+                CopyRecordItem(RecordItemToModify, RecordList[index]);
+                string str = await BackupAsync(SaveType.LocalState);
+                if (str.StartsWith("-"))
+                    Title = str.Substring(1);
+                else
+                    Title = "收藏列表";
+                IsUcItemDetailVisible = false;
+                IsGrdPwdsListVisible = true;
+                IsBackVisible = false;
+            }
             else
-                Title = "收藏列表";
-            IsUcItemDetailVisible = false;
-            IsGrdPwdsListVisible = true;
-            IsBackVisible = false;
+            {
+                RecordItemToModify.WebSite = "错误！已有此网站与账号！";
+            }
+           
         }
 
         //进入更改数据的设置,RecordItemMemory为记忆条目，RecordItemToModify为被绑定待修改条目

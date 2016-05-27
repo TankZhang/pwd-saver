@@ -375,7 +375,7 @@
                                             Visibility="{Binding IsUcItemDetailVisible,Converter={StaticResource visibleConverter}}"/>
                     <!--设置部分的grid-->
                     <Grid Name="grdSet"
-                          Visibility="Collapsed">
+                          Visibility="{Binding ElementName=lstiSet, Path=IsSelected, Converter={StaticResource visibleConverter}}">
                         <local:UcSettings />
                     </Grid>
                     <!--进入界面计算器的显示-->

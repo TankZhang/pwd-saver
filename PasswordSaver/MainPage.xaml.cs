@@ -90,21 +90,21 @@ namespace PasswordSaver
                 VM.IsUcItemDetailVisible = false;
                 VM.Title = "主页";
                 grdPwdsList.Visibility = Visibility.Collapsed;
-                grdSet.Visibility = Visibility.Collapsed;
+                //grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiList.IsSelected)
             {
                 VM.Title = "收藏列表";
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Visible;
-                grdSet.Visibility = Visibility.Collapsed;
+                //grdSet.Visibility = Visibility.Collapsed;
             }
             if (lstiAdd.IsSelected)
             {
                 VM.Title = "添加条目";
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Collapsed;
-                grdSet.Visibility = Visibility.Collapsed;
+                //grdSet.Visibility = Visibility.Collapsed;
                 VM.GoToAdd();
 
             }
@@ -113,7 +113,7 @@ namespace PasswordSaver
                 VM.Title = "设置";
                 VM.IsUcItemDetailVisible = false;
                 grdPwdsList.Visibility = Visibility.Collapsed;
-                grdSet.Visibility = Visibility.Visible;
+                //grdSet.Visibility = Visibility.Visible;
                 VM.SettingResult = "";
             }
             if (lstiQuit.IsSelected)
