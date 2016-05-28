@@ -164,7 +164,6 @@ namespace PasswordSaver
                 lstbiExport.Visibility = lstbiExport.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
                 lstbiLocalBackup.Visibility = Visibility.Collapsed;
                 lstbiDoc.Visibility = Visibility.Collapsed;
-
             }
 
         }

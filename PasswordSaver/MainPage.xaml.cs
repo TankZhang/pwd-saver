@@ -82,6 +82,7 @@ namespace PasswordSaver
 
         private async void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            spltvMain.IsPaneOpen = false;
             VM.IsBackVisible = false;
             if (lstiMain.IsSelected)
             {
@@ -115,6 +116,10 @@ namespace PasswordSaver
                 grdPwdsList.Visibility = Visibility.Collapsed;
                 //grdSet.Visibility = Visibility.Visible;
                 VM.SettingResult = "";
+            }
+            if(lstiRate.IsSelected)
+            {
+                await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9nblggh4vgv2"));
             }
             if (lstiQuit.IsSelected)
             {

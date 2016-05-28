@@ -418,6 +418,7 @@
                     <TextBlock TextWrapping="Wrap"
                                Name="txbDoc"/>
                 </ListBoxItem>
+                <!--<ListBoxItem Name="lstbiRate" Content="给他打个好评"/>-->
             </ListBox>
         </StackPanel>
     </Grid>

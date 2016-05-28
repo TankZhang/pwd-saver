@@ -222,6 +222,18 @@
                                        Margin="20,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
+                    <!--Pane中评价按钮-->
+                    <ListBoxItem Name="lstiRate"
+                                 Visibility="{Binding IsCheck,Converter={StaticResource visibleConverter},Mode=TwoWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets"
+                                       Text="&#xE76E;"
+                                       FontSize="20"/>
+                            <TextBlock Text="评价"
+                                       FontSize="18"
+                                       Margin="20,0,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
                     <!--Pane中退出按钮-->
                     <ListBoxItem Name="lstiQuit"
                                  Visibility="{Binding IsCheck,Converter={StaticResource visibleConverter},Mode=TwoWay}">
