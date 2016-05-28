@@ -400,9 +400,9 @@
                         <TextBlock Text="通过在RoamingData创建文件进行备份,不稳定。每次默认备份，因此不提供备份按钮。原计划通过此机制得到无缝多平台切换，但其效果并没那么好，因此跨平台使用该软件时建议大家手动onedrive备份，当忘记onedrive备份时候可以尝试通过此备份方式恢复备份。"
                                    TextWrapping="Wrap"/>
                         <StackPanel Orientation="Horizontal">
-                            <Button Name="btnStartRoamingBackup"
+                            <!--<Button Name="btnStartRoamingBackup"
                             Content="开始备份"
-                            Click="button_Click"/>
+                            Click="button_Click"/>-->
                             <Button Name="btnRecoverRoamingBackup"
                             Content="恢复备份"
                             Click="button_Click"/>
