@@ -13,7 +13,6 @@
         <JumpListItemBackgroundConverter x:Key="BackgroundConverter" Enabled="LightGreen"
                                          Disabled="Transparent"/>
         <JumpListItemBackgroundConverter x:Key="ForegroundConverter" Enabled="White" Disabled="Black"/>
-
         <Style TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
@@ -33,7 +32,7 @@
                                     <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
                                     <Setter Property="TextLineBounds" Value="Full"/>
                                     <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
-                                </Style>
+                                </Style> 
                                 <Style x:Key="BodyContentPresenterStyle" BasedOn="{StaticResource BaseContentPresenterStyle}" TargetType="ContentPresenter">
                                     <Setter Property="FontWeight" Value="Normal"/>
                                     <Setter Property="FontSize" Value="15"/>
