@@ -10,5 +10,8 @@
         <local:VisibleBindingHelper x:Key="visibleConverter"/>
         <local:FontSizeBindingHelper x:Key="fontsizeConverter"/>
         <local:StringVisibleBindingHelper x:Key="stringVisibleConverter"/>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
     </Application.Resources>
 </Application>

@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
@@ -36,11 +37,37 @@ namespace PasswordSaver
             this.DataContext = VM;
             SystemNavigationManager m = SystemNavigationManager.GetForCurrentView();
             m.BackRequested += Quit;
+            //设置背景
+            ApplicationDataContainer localSettings =ApplicationData.Current.LocalSettings;
+            try {
+
+                if ((bool)localSettings.Values["IsBackgroundSetting"])
+                {
+                    ImageBrush imgbrush = new ImageBrush();
+                    imgbrush.ImageSource = new BitmapImage(new Uri(@"ms-appx:///Assets/CalBackground.jpg"));
+                    Background = imgbrush;
+                    localSettings.Values["IsBackgroundSetting"] = true;
+                }
+                else
+                {
+                    SolidColorBrush sBrush = new SolidColorBrush();
+                    sBrush.Color = Colors.White;
+                    Background = sBrush;
+                }
+            }
+            catch
+            {
+                SolidColorBrush sBrush = new SolidColorBrush();
+                sBrush.Color = Colors.White;
+                Background = sBrush;
+                localSettings.Values["IsBackgroundSetting"] = false;
+            }
+            //this.Background = null;
             //Window.Current.SizeChanged += Current_SizeChanged;
             //ApplicationView.PreferredLaunchViewSize = new Size { Height = 800, Width = 450 };
             //ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 450, Height = 800 });
-            
+
         }
 
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
@@ -169,6 +196,27 @@ namespace PasswordSaver
                 { stcpItemHide = (StackPanel)item; }
             }
             stcpItemHide.Visibility = stcpItemHide.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        //更换背景
+        public void ChangeBackGround()
+        {
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+            if ((bool)localSettings.Values["IsBackgroundSetting"])
+            {
+                SolidColorBrush sBrush = new SolidColorBrush();
+                sBrush.Color = Colors.White;
+                Background = sBrush;
+            }
+            else
+            {
+                ImageBrush imgbrush = new ImageBrush();
+                imgbrush.ImageSource = new BitmapImage(new Uri(@"ms-appx:///Assets/CalBackground.jpg"));
+                Background = imgbrush;
+                localSettings.Values["IsBackgroundSetting"] = true;
+
+            }
         }
     }
 }

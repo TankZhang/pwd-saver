@@ -9,7 +9,7 @@
     d:DesignHeight="800"
     d:DesignWidth="450">
     <UserControl.Resources>
-        <Style TargetType="ListBoxItem">
+        <!--<Style TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="Padding" Value="12,11,12,13"/>
@@ -89,8 +89,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <Style TargetType="TextBox">
+        </Style>-->
+        <!--<Style TargetType="TextBox">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#05879D"/>
             <Setter Property="Template">
@@ -181,8 +181,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <Style TargetType="PasswordBox">
+        </Style>-->
+        <!--<Style TargetType="PasswordBox">
             <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
             <Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
@@ -329,13 +329,13 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </UserControl.Resources>
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding SettingResult}"
                        TextWrapping="WrapWholeWords"
-                       Foreground="White"
+                       Foreground="Red"
                         />
             <ListBox Background="Transparent" Tapped="ListBox_Tapped">
                 <ListBoxItem Content="修改登陆密码" Name="lstbiGoChange" />
@@ -343,20 +343,23 @@
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center">请输入原密码：</TextBlock>
-                            <TextBox Name="tbxOldPwd" GotFocus="tbxOldPwd_GotFocus"/>
+                            <TextBox Name="tbxOldPwd" 
+                                     GotFocus="tbxOldPwd_GotFocus"
+                                     Background="Transparent"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center">请输入新密码：</TextBlock>
                             <PasswordBox PasswordChar="*" 
-                                 Name="pwbxNewPwd"
-                                 GotFocus="pwbxNewPwd_GotFocus"
-                                     Background="Transparent"/>
+                                         Name="pwbxNewPwd"
+                                         GotFocus="pwbxNewPwd_GotFocus"
+                                         Background="Transparent"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center">请确认新密码：</TextBlock>
                             <PasswordBox PasswordChar="*" 
-                                 Name="pwbxNewPwdConfirm"
-                                 GotFocus="pwbxNewPwdConfirm_GotFocus"/>
+                                         Name="pwbxNewPwdConfirm"
+                                         GotFocus="pwbxNewPwdConfirm_GotFocus"
+                                         Background="Transparent"/>
                         </StackPanel>
                         <Button Name="btnChangePwdConfirm"
                         Content="确认修改"
@@ -413,6 +416,7 @@
                 <ListBoxItem Name="lstbiExport" Visibility="Collapsed">
                     <Button  Content="导出数据" Name="btnExport" Click="button_Click"/>
                 </ListBoxItem>
+                <ListBoxItem Content="显示/隐藏背景" Name="lstbiChangeBackground" />
                 <ListBoxItem Content="常见问题说明" Name="lstbiGoDoc" />
                 <ListBoxItem Name="lstbiDoc" Visibility="Collapsed">
                     <TextBlock TextWrapping="Wrap"

@@ -165,6 +165,26 @@ namespace PasswordSaver
                 lstbiLocalBackup.Visibility = Visibility.Collapsed;
                 lstbiDoc.Visibility = Visibility.Collapsed;
             }
+            if (lstbiChangeBackground.IsSelected)
+            {
+                var item = VisualTreeHelper.GetParent(this);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                //Debug.WriteLine(item.ToString());
+                item = VisualTreeHelper.GetParent(item);
+                ((MainPage)item).ChangeBackGround();
+            }
+            
 
         }
         

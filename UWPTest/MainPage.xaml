@@ -5,7 +5,9 @@
     xmlns:local="using:UWPTest"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Name="mainPage"
+    >
     <Page.DataContext>
         <local:TViewModel x:Name="TVM"/>
     </Page.DataContext>
@@ -13,7 +15,7 @@
         <JumpListItemBackgroundConverter x:Key="BackgroundConverter" Enabled="Red"
                                          Disabled="Transparent"/>
         <JumpListItemBackgroundConverter x:Key="ForegroundConverter" Enabled="White" Disabled="Black"/>
-        <Style TargetType="CheckBox">
+        <!--<Style TargetType="CheckBox">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
             <Setter Property="Padding" Value="8,5,0,0"/>
@@ -202,96 +204,15 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </Page.Resources>
-    <Grid Background="LightBlue">
+    <Page.Background>
+        <ImageBrush ImageSource="Assets/CalBackground.jpg" Stretch="UniformToFill" AlignmentX="Left"/>
+    </Page.Background>
+    <Grid>
         <StackPanel>
-            <CheckBox Content="你好" />
+            <Button Click="Button_Click">SystemControlBackgroundAccentBrush</Button>
+            <CheckBox Background="{Binding ElementName=mainPage, Path=Background}">hah</CheckBox>
         </StackPanel>
-        <!--<StackPanel>
-                <StackPanel.Resources>
-                    <CollectionViewSource x:Key="CollectionViewSource" IsSourceGrouped="True"
-                                          ItemsPath="InternalList"
-                                          Source="{Binding Records}"/>
-                </StackPanel.Resources>
-                <TextBox Name="tbxIn" />
-                <Button Content="得到" Click="Button_Click"/>
-                <TextBox Name="tbxOut"/>
-                <Button Content="添加" Click="Button_Click"/>
-            <Button Content="删除" Click="Button_Click"/>
-        <SemanticZoom>
-                    -->
-        <!--数据列表-->
-        <!--
-                    <SemanticZoom.ZoomedInView>
-                        <ListView ItemsSource="{Binding Source={StaticResource CollectionViewSource}}">
-                            <ListView.ItemTemplate>
-                                -->
-        <!--<DataTemplate >
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding WebSite}"/>
-                                        <TextBlock Text="{Binding Account}"/>
-                                    </StackPanel>
-                                </DataTemplate>-->
-        <!--
-                                <DataTemplate x:DataType="local:RecordItem">
-                                    <local:UcDataItem />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            -->
-        <!--列表头-->
-        <!--
-                            <ListView.GroupStyle>
-                                <GroupStyle HidesIfEmpty="True">
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Key}"/>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
-                            </ListView.GroupStyle>
-                        </ListView>
-                    </SemanticZoom.ZoomedInView>
-                    -->
-        <!--排序列表-->
-        <!--
-                    <SemanticZoom.ZoomedOutView>
-                        <GridView ItemsSource="{Binding Source={StaticResource CollectionViewSource},Path=CollectionGroups}">
-                            <GridView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapGrid MaximumRowsOrColumns="6" VerticalAlignment="Top" Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </GridView.ItemsPanel>
-                            <GridView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="{Binding Converter={StaticResource BackgroundConverter}}">
-                                        <TextBlock Text="{Binding Group.Key}" HorizontalAlignment="Center" 
-                                                   VerticalAlignment="Center"
-                                                   Foreground="{Binding Converter={StaticResource ForegroundConverter}}"/>
-                                    </Border>
-                                </DataTemplate>
-                            </GridView.ItemTemplate>
-                            <GridView.ItemContainerStyle>
-                                <Style TargetType="GridViewItem">
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </GridView.ItemContainerStyle>
-                            <GridView.Template>
-                                <ControlTemplate>
-                                    <ScrollViewer ScrollViewer.VerticalScrollMode="Enabled">
-                                        <Viewbox Stretch="Uniform" Margin="8"  VerticalAlignment="Top" 
-                                             ScrollViewer.VerticalScrollMode="Enabled" StretchDirection="Both" >
-                                            <ItemsPresenter  />
-                                        </Viewbox>
-                                    </ScrollViewer>
-                                </ControlTemplate>
-                            </GridView.Template>
-                        </GridView>
-                    </SemanticZoom.ZoomedOutView>
-            </SemanticZoom>
-        </StackPanel>-->
     </Grid>
 </Page>

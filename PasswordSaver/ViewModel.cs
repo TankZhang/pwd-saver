@@ -260,51 +260,51 @@ namespace PasswordSaver
         #endregion
 
         #region 各类命令
-        //ICommand _modifyCmd;
-        //public ICommand ModifyCmd
-        //{
-        //    get
-        //    {
-        //        return _modifyCmd;
-        //    }
+        ICommand _modifyCmd;
+        public ICommand ModifyCmd
+        {
+            get
+            {
+                return _modifyCmd;
+            }
 
-        //    set
-        //    {
-        //        _modifyCmd = value;
-        //    }
-        //}
+            set
+            {
+                _modifyCmd = value;
+            }
+        }
 
-        //ICommand _backCmd;
-        //public ICommand BackCmd
-        //{
-        //    get
-        //    {
-        //        return _backCmd;
-        //    }
+        ICommand _backCmd;
+        public ICommand BackCmd
+        {
+            get
+            {
+                return _backCmd;
+            }
 
-        //    set
-        //    {
-        //        _backCmd = value;
-        //        RaisedPropertyChanged("BackCmd");
-        //    }
-        //}
+            set
+            {
+                _backCmd = value;
+                RaisedPropertyChanged("BackCmd");
+            }
+        }
 
-        //ICommand _addCmd;
-        //public ICommand AddCmd
-        //{
-        //    get
-        //    {
-        //        return _addCmd;
-        //    }
+        ICommand _addCmd;
+        public ICommand AddCmd
+        {
+            get
+            {
+                return _addCmd;
+            }
 
-        //    set
-        //    {
-        //        _addCmd = value;
-        //        RaisedPropertyChanged("AddCmd");
-        //    }
-        //}
+            set
+            {
+                _addCmd = value;
+                RaisedPropertyChanged("AddCmd");
+            }
+        }
         #endregion
-        
+
         //刷新Records
         private void UpdateRecords()
         {
@@ -576,9 +576,9 @@ namespace PasswordSaver
             IsCheck = false;
             IsGrdPwdsListVisible = false;
             IsUcItemDetailVisible = false;
-            //ModifyCmd = new RelayCommand(new Action(ModifyData));
-            //BackCmd = new RelayCommand(new Action(Back));
-            //AddCmd = new RelayCommand(new Action(AddData));
+            ModifyCmd = new RelayCommand(new Action(ModifyData));
+            BackCmd = new RelayCommand(new Action(Back));
+            AddCmd = new RelayCommand(new Action(AddData));
             string str = await FileManager.RecoverAsync(SaveType.LocalState);
             if (str.StartsWith("-"))
             { RightPwdMd5 = EncryptHelper.PwdEncrypt("123"); }

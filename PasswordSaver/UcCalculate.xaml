@@ -62,7 +62,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="TextBox">
+        <!--<Style TargetType="TextBox">
             <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
             <Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
@@ -188,7 +188,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </UserControl.Resources>
 
     <Grid >
@@ -212,8 +212,12 @@
                  TextAlignment="Right"
                  Grid.ColumnSpan="4"
                  FontSize="{Binding ElementName=tbxShow,Path=ActualHeight,Converter={StaticResource fontsizeConverter},ConverterParameter='CalFontSize'}"
-                 
-                />
+                >
+            <TextBox.BorderBrush>
+                <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+            </TextBox.BorderBrush>
+        </TextBox> 
+                
         <Button  Click="Button_Click" Grid.Row="1"
                      Content="7"
                  FontSize="{Binding ElementName=tbxShow,Path=FontSize}"

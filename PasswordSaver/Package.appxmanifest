@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="55214.4705144748DBE" Publisher="CN=2D539A84-3C75-4006-BCF3-8CA83856BCF0" Version="1.1.2.0" />
+  <Identity Name="55214.4705144748DBE" Publisher="CN=2D539A84-3C75-4006-BCF3-8CA83856BCF0" Version="1.1.3.0" />
   <mp:PhoneIdentity PhoneProductId="82a91a1f-3a23-433b-986b-9a1647de421f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>密码计算器</DisplayName>
@@ -22,7 +22,7 @@
             <uap:ShowOn Tile="wide310x150Logo" />
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#088FC1" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="transparent" />
       </uap:VisualElements>
       <Extensions>
         <uap:Extension Category="windows.fileTypeAssociation">
