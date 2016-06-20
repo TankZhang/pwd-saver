@@ -1,0 +1,2 @@
+MainPackage=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\bin\x86\Release\Upload\PasswordSaver_1.1.4.0_x86.appx
+SymbolPackage=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\AppPackages\PasswordSaver_1.1.4.0\PasswordSaver_1.1.4.0_x86.appxsym

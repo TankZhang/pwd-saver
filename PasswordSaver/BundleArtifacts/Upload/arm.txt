@@ -1,0 +1,6 @@
+MainPackage=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\bin\ARM\Release\Upload\PasswordSaver_1.1.4.0_ARM.appx
+SymbolPackage=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\AppPackages\PasswordSaver_1.1.4.0\PasswordSaver_1.1.4.0_ARM.appxsym
+ResourcePack=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\_scale-100.appx
+ResourcePack=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\_scale-125.appx
+ResourcePack=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\_scale-150.appx
+ResourcePack=F:\files\Zhang\UWP\PasswordSaver\PasswordSaver\_scale-400.appx
